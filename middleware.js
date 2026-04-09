@@ -8,11 +8,14 @@ module.exports.wrapAsync = (fn) => {
 
 module.exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
+        // SAVE the requested URL before redirecting to login
+        req.session.redirectUrl = req.originalUrl; 
         req.flash("error", "Please login first!");
         return res.redirect("/login");
     }
     next();
 };
+
 
 module.exports.isOwnerOrAdmin = module.exports.wrapAsync(async (req, res, next) => {
     let { id } = req.params;
@@ -56,7 +59,6 @@ module.exports.saveRedirectUrl = (req, res, next) => {
     }
     next();
 };
-
 
 
 const Joi = require('joi');

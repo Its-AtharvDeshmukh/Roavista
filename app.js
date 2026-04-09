@@ -24,6 +24,20 @@ const User = require("./models/user.js");
 //-----------------------------------------------------------------//
 
 //------------------------ DATABASE --------------------------------//
+
+//  const MONGO_URL = "mongodb://127.0.0.1:27017/roavista";
+//  async function main() {
+//     await mongoose.connect(SECOND_DB_URL);
+//   }
+
+//   main()
+//     .then(() => {
+//       console.log("connected to DB");
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+
     const dbUrl = process.env.ATLASDB_URL;
     async function main() { await mongoose.connect(dbUrl); }
     main().then(() => console.log("Connected to DB")).catch(err => console.log("DB Error:", err));
