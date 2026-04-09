@@ -8,8 +8,7 @@ module.exports.wrapAsync = (fn) => {
 
 module.exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
-        // SAVE the requested URL before redirecting to login
-        req.session.redirectUrl = req.originalUrl; 
+        req.session.redirectUrl = req.originalUrl; // SAVE THE PATH
         req.flash("error", "Please login first!");
         return res.redirect("/login");
     }
