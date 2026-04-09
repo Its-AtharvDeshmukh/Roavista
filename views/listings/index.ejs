@@ -1,0 +1,360 @@
+<%- layout("layouts/boilerplate") %>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&display=swap');
+
+    /* ============================================================
+       INFINITE LOOPING CATEGORY TICKER
+       ============================================================ */
+    .category-ticker-wrapper {
+        width: 100%;
+        overflow: hidden; /* Hides the scrollbar */
+        padding: 5px 0 15px 0;
+        position: relative;
+        /* Adds a luxury fade effect on the left and right edges */
+        -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+        mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+    }
+
+    .category-ticker-track {
+        display: flex;
+        width: max-content;
+        /* Speed: Change 35s to make it scroll faster or slower */
+        animation: infiniteScroll 35s linear infinite;
+    }
+
+    /* Pause the scrolling when the user hovers so they can click */
+    .category-ticker-wrapper:hover .category-ticker-track {
+        animation-play-state: paused;
+    }
+
+    .ticker-group {
+        display: flex;
+        gap: 15px;
+        padding-right: 15px; /* Ensures a perfect gap between the two groups */
+    }
+
+    @keyframes infiniteScroll {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); } /* Slides exactly half the width */
+    }
+
+    /* Premium Category Pill Styling */
+    .cat-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 22px;
+        border-radius: 50px;
+        background: #fff;
+        color: var(--rv-text, #2A2321);
+        border: 1px solid rgba(211, 139, 93, 0.3);
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+
+    .cat-pill:hover, .cat-pill.active {
+        background: var(--rv-gold, #D38B5D);
+        color: #fff;
+        border-color: var(--rv-gold, #D38B5D);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(211, 139, 93, 0.25);
+    }
+
+    .unwanted-image {
+        font-size: 1rem;
+    }
+
+    /* ============================================================
+       MOBILE OPTIMIZATIONS
+       ============================================================ */
+   @media (max-width: 991px) {
+
+    .hero-sanctuary {
+    height: 50vh !important;
+    width: 100% !important;   /* 🔥 FIX */
+    border-bottom-left-radius: 20px !important;
+    border-bottom-right-radius: 20px !important;
+    margin-top: 10px !important;
+}
+
+    .hero-headline {
+        font-size: 2.2rem !important;
+        line-height: 1.2 !important;
+        padding: 0 10px;
+    }
+
+    .hero-tagline {
+        font-size: 0.95rem !important;
+        padding: 0 10px;
+    }
+
+    /* 🔥 FIX STARTS HERE */
+    
+    /* remove hidden */
+    .trust-dock {
+        display: block !important;
+        visibility: hidden !important;
+        margin-top: -110px !important;
+    }
+
+    /* override bootstrap row */
+    .trust-dock .row {
+        display: flex !important;
+        flex-wrap: nowrap !important;      /* force one line */
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        overflow-x: auto;                  /* scroll if needed */
+    }
+
+    /* override bootstrap columns */
+    .trust-dock .col-md-4 {
+        flex: 0 0 auto !important;
+        width: auto !important;
+        padding: 0 !important;
+        border: none !important;
+    }
+
+    /* trust items */
+    .trust-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0 !important;
+        padding: 10px !important;
+        flex: 0 0 auto;
+    }
+
+    /* optional: hide text */
+    .trust-text {
+        display: none;
+    }
+
+    /* other existing fixes */
+    .card-meta-ticker .ticker-default {
+        display: none !important;
+    }
+
+    .card-meta-ticker .ticker-hover {
+        position: static !important;
+        opacity: 1 !important;
+        transform: none !important;
+        display: block !important;
+    }
+
+    .card-image-frame {
+        border-radius: 18px !important;
+        aspect-ratio: 4 / 3 !important;
+    }
+}
+</style>
+
+<div class="roavista-home-wrapper">
+    
+    <div class="container-fluid px-lg-5 mt-3 mt-lg-4">
+        <div class="hero-sanctuary shadow-premium fade-in-up">
+            <div class="video-background">
+                <iframe 
+                    id="bg-video" 
+                    src="https://www.youtube.com/embed/85752jKjjok?autoplay=1&mute=1&loop=1&playlist=85752jKjjok&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1" 
+                    title="YouTube background video" 
+                    frameborder="0" 
+                    allow="autoplay; fullscreen" 
+                    style="width: 100%; height: 100%; pointer-events: none;">
+                </iframe>
+            </div>
+            <div class="hero-scrim"></div>
+            <div class="hero-film-badge animate-fade-in">
+                <span class="live-pulse-dot"></span>
+                <span class="badge-text">Roavista Original Film</span>
+            </div>
+            <div class="hero-overlay-content">
+                <h1 class="hero-headline animate-slide-up" style="animation-delay: 0.4s;">
+                    The Art of <br><span class="text-gold italic-serif" style="color: var(--rv-gold);">Refined</span> Living
+                </h1>
+                <p class="hero-tagline animate-slide-up" style="animation-delay: 0.6s;">
+                  Discover and book exceptional stays around the world
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid px-lg-5 fade-in-up" style="animation-delay: 0.2s;">
+        <div class="trust-dock shadow-lg">
+            <div class="row align-items-center">
+                <div class="col-md-4 py-3 py-md-0 trust-col">
+                    <div class="trust-item">
+                        <div class="icon-glow"><i class="fa-solid fa-house-circle-check"></i></div>
+                        <div class="trust-text">
+                            <h6 class="trust-title">Enjoy the Experience</h6>
+                            <p class="trust-desc">Simple, fast, and secure checkout <br>Book your stay in seconds -no waiting.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 py-4 py-md-0 trust-col trust-center-col">
+                    <div class="trust-item">
+                        <div class="icon-glow"><i class="fa-regular fa-calendar-check"></i></div>
+                        <div class="trust-text">
+                            <h6 class="trust-title">Instant Booking</h6>
+                            <p class="trust-desc">Secure dates instantly with transparent pricing and flexible cancellation policies.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 py-3 py-md-0 trust-col">
+                    <div class="trust-item">
+                        <div class="icon-glow"><i class="fa-solid fa-bell-concierge"></i></div>
+                        <div class="trust-text">
+                            <h6 class="trust-title">Dedicated Concierge</h6>
+                            <p class="trust-desc">Our 24/7 global team is ready to curate every detail of your stay.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid px-0 mt-1 pt-3 pt-lg-4 mb-4 fade-in-up" style="animation-delay: 0.3s;">
+        <div class="category-ticker-wrapper">
+            <div class="category-ticker-track">
+                <% 
+                   const categories = [
+                     { name: 'Trending', icon: 'fa-fire' },
+                     { name: 'Rooms', icon: 'fa-bed' },
+                     { name: 'Iconic Cities', icon: 'fa-city' },
+                     { name: 'Mountains', icon: 'fa-mountain' },
+                     { name: 'Castles', icon: 'fa-fort-awesome', brand: true },
+                     { name: 'Amazing Pools', icon: 'fa-water-ladder' },
+                     { name: 'Camping', icon: 'fa-campground' },
+                     { name: 'Farms', icon: 'fa-cow' },
+                     { name: 'Arctic', icon: 'fa-snowflake', regular: true },
+                     { name: 'Domes', icon: 'fa-igloo' },
+                     { name: 'Boats', icon: 'fa-ship' }
+                   ];
+                %>
+
+                <div class="ticker-group">
+                    <a href="/listings" class="cat-pill text-decoration-none <%= !locals.currentCategory ? 'active' : '' %>">
+                        <i class="fa-solid fa-globe"></i> All
+                    </a>
+                    <% categories.forEach(cat => { %>
+                        <a href="/listings?category=<%= cat.name %>" class="cat-pill text-decoration-none <%= locals.currentCategory === cat.name ? 'active' : '' %>">
+                            <i class="<%= cat.brand ? 'fa-brands' : (cat.regular ? 'fa-regular' : 'fa-solid') %> <%= cat.icon %>"></i> <%= cat.name %>
+                        </a>
+                    <% }) %>
+                </div>
+
+                <div class="ticker-group">
+                    <a href="/listings" class="cat-pill text-decoration-none <%= !locals.currentCategory ? 'active' : '' %>">
+                        <i class="fa-solid fa-globe"></i> All
+                    </a>
+                    <% categories.forEach(cat => { %>
+                        <a href="/listings?category=<%= cat.name %>" class="cat-pill text-decoration-none <%= locals.currentCategory === cat.name ? 'active' : '' %>">
+                            <i class="<%= cat.brand ? 'fa-brands' : (cat.regular ? 'fa-regular' : 'fa-solid') %> <%= cat.icon %>"></i> <%= cat.name %>
+                        </a>
+                    <% }) %>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid px-3 px-lg-5 mb-5 pb-5">
+        <div class="d-flex justify-content-between align-items-end mb-4 fade-in-up" style="animation-delay: 0.4s;">
+            <h2 class="section-heading m-0"><%= locals.currentCategory ? locals.currentCategory : 'The Collection' %></h2>
+        </div>
+        
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+            <% if (allListings.length === 0) { %>
+                <div class="col-12 text-center py-5 w-100">
+                    <!-- <i class="fa-regular fa-compass mb-3" style="font-size: 3rem; color: #c5a059;"></i> -->
+                    <img src="/images/logo.png" style="height: 3rem; width: auto;" class="" alt="Roavista Logo">
+                    <h3 style="font-family: 'Playfair Display', serif; font-weight: 700;">No Listings found.</h3>
+                    <p class="text-muted">Try a different category or search term.</p>
+                    <a href="/listings" class="btn btn-dark rounded-pill px-4 mt-3 py-2 fw-bold">Explore Stays</a>
+                </div>
+            <% } else { %>
+                <% allListings.forEach((listing, index) => { %>
+                    <div class="col stagger-fade-in" style="animation-delay: <%= 0.08 * index %>s;">
+                        <a href="/listings/<%= listing._id %>" class="text-decoration-none d-block h-100">
+                            <div class="luxe-listing-card h-100">
+                                <div class="card-image-frame">
+                                    
+                                    <% if (listing.images && listing.images.length > 0) { %>
+                                        <img src="<%= listing.images[0].url %>" class="card-img" alt="<%= listing.title %>">
+                                    <% } else if (listing.image && listing.image.url) { %>
+                                        <img src="<%= listing.image.url %>" class="card-img" alt="<%= listing.title %>">
+                                    <% } else { %>
+                                        <img src="https://images.unsplash.com/photo-1499793983690-e29da59ef1c2" class="card-img" alt="Placeholder">
+                                    <% } %>
+
+                                    <button class="like-toggle-btn">
+                                        <i class="fa-regular fa-heart"></i>
+                                    </button>
+                                    <div class="location-badge">
+                                        <i class="fa-solid fa-location-dot"></i> <span class="loc-text"><%= listing.location %></span>
+                                    </div>
+                                </div>
+
+                                <div class="card-content mt-3">
+                                    <div class="d-flex justify-content-between align-items-start mb-1">
+                                        <h5 class="card-title text-truncate pe-2"><%= listing.title %></h5>
+                                       <div class="card-rating d-flex align-items-center gap-1">
+                                            <% if (listing.reviews && listing.reviews.length > 0 && typeof listing.reviews[0] === 'object') { 
+                                                let sum = listing.reviews.reduce((acc, r) => acc + (r.rating || 0), 0);
+                                                let avg = (sum / listing.reviews.length).toFixed(1);
+                                            %>
+                                                <i class="fa-solid fa-star text-gold" style="font-size: 0.8rem; color: var(--rv-gold);"></i>
+                                                <span class="fw-bold" style="font-size: 0.95rem;"><%= avg %></span>
+                                                <span class="text-muted" style="font-size: 0.8rem;">(<%= listing.reviews.length %>)</span>
+                                            <% } else { %>
+                                                <i class="fa-regular fa-star text-muted" style="font-size: 0.8rem;"></i>
+                                                <span class="text-muted fw-bold" style="font-size: 0.8rem;">New</span>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                    <div class="card-meta-ticker">
+                                        <div class="ticker-default">
+                                            <p class="card-location m-0"><%= listing.country %></p>
+                                        </div>
+                                        <div class="ticker-hover">
+                                            <div class="price-creative-block">
+                                                <span class="price-currency">₹</span>
+                                                <span class="price-value"><%= listing.price.toLocaleString("en-IN") %></span>
+                                                <span class="price-period">/ night</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                <% }) %>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Handles the heartbeat animation on the like button
+    document.addEventListener('DOMContentLoaded', () => {
+        const likeButtons = document.querySelectorAll('.like-toggle-btn');
+        likeButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault(); 
+                e.stopPropagation(); 
+                const icon = btn.querySelector('i');
+                btn.classList.toggle('is-liked');
+                if (btn.classList.contains('is-liked')) {
+                    icon.className = 'fa-solid fa-heart';
+                    btn.style.transform = 'scale(1.3) rotate(5deg)';
+                    setTimeout(() => btn.style.transform = '', 200);
+                } else {
+                    icon.className = 'fa-regular fa-heart';
+                }
+            });
+        });
+    });
+</script>

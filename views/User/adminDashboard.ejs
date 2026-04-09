@@ -1,0 +1,172 @@
+<%- layout("/layouts/boilerplate") %>
+
+<div class="ethereal-showcase py-5" style="min-height: 85vh;">
+    <div class="container px-3 px-lg-5">
+        
+        <div class="row align-items-center mb-5 animate-fade-in-up">
+            <div class="col-md-7 mb-4 mb-md-0 text-center text-md-start">
+                <h1 class="v-title mb-2">User Management</h1>
+                <p class="text-muted m-0">Overseeing <strong><%= allUsers.length %></strong> registered members of the Roavista community.</p>
+            </div>
+            <div class="col-md-5 text-center text-md-end">
+                <div class="admin-stat-pill d-inline-flex align-items-center shadow-sm">
+                    <div class="stat-dot sm-pulse me-2"></div>
+                    <span class="stat-label">SYSTEM ONLINE</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-5 animate-fade-in-up">
+            <div class="col-12">
+                <div class="admin-glass-card shadow-premium p-0 overflow-hidden">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="admin-thead">
+                                <tr>
+                                    <th class="ps-4 py-3">IDENTIFIER</th>
+                                    <th class="py-3">MEMBER</th>
+                                    <th class="py-3">CONTACT</th>
+                                    <th class="py-3">JOINED</th>
+                                    <th class="text-center py-3">AUTHORIZATION</th>
+                                </tr>
+                            </thead>
+                            <tbody class="admin-tbody">
+                                <% allUsers.forEach((user, index) => { %>
+                                    <tr class="animate-fade-in-up" style="animation-delay: <%= index * 0.05 %>s">
+                                        <td class="ps-4">
+                                            <code class="user-id-text">#<%= user._id.toString().slice(-8).toUpperCase() %></code>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="admin-avatar-mini">
+                                                    <%= user.username.charAt(0).toUpperCase() %>
+                                                </div>
+                                                <span class="fw-bold text-dark"><%= user.username %></span>
+                                            </div>
+                                        </td>
+                                        <td class="text-muted"><%= user.email %></td>
+                                        <td>
+                                            <span class="join-date"><%= new Date(user._id.getTimestamp()).toLocaleDateString('en-IN', {day: '2-digit', month: 'short', year: 'numeric'}) %></span>
+                                        </td>
+                                        <td class="text-center">
+                                            <% if(process.env.ADMIN_LIST.split(',').includes(user.username)) { %>
+                                                <span class="badge-premium developer">
+                                                    <i class="fa-solid fa-code me-1"></i> DEVELOPER
+                                                </span>
+                                            <% } else { %>
+                                                <span class="badge-premium standard">
+                                                    <i class="fa-solid fa-user me-1"></i> USER
+                                                </span>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* --- Admin Specific Styles --- */
+    .admin-glass-card {
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        border-radius: 28px;
+    }
+
+    .admin-thead {
+        background: #fdfbf9;
+        border-bottom: 1px solid #f2eee9;
+    }
+
+    .admin-thead th {
+        font-size: 0.65rem;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        color: #bbb;
+        text-transform: uppercase;
+    }
+
+    .admin-tbody tr {
+        transition: 0.3s ease;
+    }
+
+    .admin-tbody tr:hover {
+        background-color: #fcfbf9 !important;
+    }
+
+    .user-id-text {
+        font-size: 0.75rem;
+        color: #D38B5D;
+        background: #F7EBE5;
+        padding: 4px 8px;
+        border-radius: 6px;
+    }
+
+    .admin-avatar-mini {
+        width: 32px;
+        height: 32px;
+        background: #1a1a1a;
+        color: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 0.75rem;
+    }
+
+    .join-date {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #666;
+    }
+
+    /* Premium Badges */
+    .badge-premium {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 16px;
+        border-radius: 50px;
+        font-size: 0.65rem;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+    }
+
+    .badge-premium.developer {
+        background: #FFF8E6;
+        color: #B45309;
+        border: 1px solid #FDE68A;
+    }
+
+    .badge-premium.standard {
+        background: #F3F4F6;
+        color: #374151;
+        border: 1px solid #E5E7EB;
+    }
+
+    .admin-stat-pill {
+        background: #fff;
+        border: 1px solid #eee;
+        padding: 8px 20px;
+        border-radius: 50px;
+    }
+
+    .stat-label {
+        font-size: 0.65rem;
+        font-weight: 800;
+        color: #1a1a1a;
+        letter-spacing: 1px;
+    }
+
+    .stat-dot {
+        width: 8px;
+        height: 8px;
+        background: #28a745;
+        border-radius: 50%;
+    }
+</style>

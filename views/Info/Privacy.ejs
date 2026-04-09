@@ -1,0 +1,517 @@
+<% layout("/layouts/boilerplate") %>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
+
+:root {
+    --rv-gold: #D38B5D;
+    --rv-dark: #1a1a1a;
+    --rv-bg: #fdfdfd;
+    --rv-border: #f0f0f0;
+    --rv-muted: #888;
+    --rv-text: #444;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.policy-page {
+    font-family: 'Manrope', sans-serif;
+    background: var(--rv-bg);
+    color: var(--rv-dark);
+}
+
+/* ── Hero ── */
+.pp-hero {
+    padding: 120px 0 70px;
+    text-align: center;
+    background: linear-gradient(160deg, #fdf8f4 0%, #fdfdfd 100%);
+    border-bottom: 1px solid var(--rv-border);
+}
+
+.pp-hero-kicker {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--rv-gold);
+    margin-bottom: 18px;
+}
+
+.pp-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 8vw, 5rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -2px;
+    color: var(--rv-dark);
+    margin-bottom: 16px;
+}
+
+.pp-hero-date {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--rv-muted);
+    letter-spacing: 1px;
+}
+
+/* ── Progress bar ── */
+.pp-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: var(--rv-gold);
+    width: 0%;
+    z-index: 9999;
+    transition: width 0.1s linear;
+}
+
+/* ── Layout ── */
+.pp-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 0;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 24px 100px;
+    align-items: start;
+}
+
+/* ── Sidebar ── */
+.pp-sidebar {
+    position: sticky;
+    top: 90px;
+    height: fit-content;
+    padding-right: 40px;
+}
+
+.pp-sidebar-label {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--rv-muted);
+    margin-bottom: 20px;
+    display: block;
+}
+
+.pp-nav {
+    list-style: none;
+    border-left: 1.5px solid var(--rv-border);
+}
+
+.pp-nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 18px;
+    margin-left: -1.5px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--rv-muted);
+    text-decoration: none;
+    border-left: 1.5px solid transparent;
+    transition: color 0.25s, border-color 0.25s, background 0.25s;
+    border-radius: 0 8px 8px 0;
+}
+
+.pp-nav a:hover { color: var(--rv-dark); }
+
+.pp-nav a.active {
+    color: var(--rv-gold);
+    border-left-color: var(--rv-gold);
+    background: linear-gradient(to right, rgba(211,139,93,0.07), transparent);
+}
+
+.pp-nav-num {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.78rem;
+    color: inherit;
+    opacity: 0.6;
+    min-width: 22px;
+}
+
+/* ── Content ── */
+.pp-content { min-width: 0; }
+
+.pp-section {
+    background: #fff;
+    border: 1px solid var(--rv-border);
+    border-radius: 24px;
+    padding: 48px 52px;
+    margin-bottom: 20px;
+    transition: box-shadow 0.3s;
+}
+
+.pp-section:hover {
+    box-shadow: 0 12px 40px rgba(0,0,0,0.05);
+}
+
+.pp-section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+.pp-section-num {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--rv-gold);
+    font-size: 1.4rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.pp-section-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--rv-dark);
+}
+
+.pp-text {
+    font-size: 1rem;
+    line-height: 1.9;
+    color: var(--rv-text);
+}
+
+/* ── List items ── */
+.pp-list {
+    list-style: none;
+    margin-top: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.pp-list li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #fafafa;
+    border: 1px solid var(--rv-border);
+    border-radius: 14px;
+    padding: 16px 20px;
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--rv-dark);
+}
+
+.pp-list li i {
+    color: var(--rv-gold);
+    font-size: 1rem;
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* ── Contact card ── */
+.pp-contact {
+    background: var(--rv-dark);
+    border-radius: 24px;
+    padding: 52px 40px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.pp-contact-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(211,139,93,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+}
+
+.pp-contact-icon i {
+    color: var(--rv-gold);
+    font-size: 1.4rem;
+}
+
+.pp-contact h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 12px;
+}
+
+.pp-contact p {
+    color: rgba(255,255,255,0.55);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 28px;
+    font-weight: 500;
+}
+
+.pp-contact-email {
+    display: inline-block;
+    color: var(--rv-gold);
+    font-size: 1.1rem;
+    font-weight: 800;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(211,139,93,0.3);
+    padding-bottom: 3px;
+    transition: border-color 0.2s;
+}
+
+.pp-contact-email:hover { border-color: var(--rv-gold); }
+
+/* ── Mobile TOC pill ── */
+.pp-mobile-toc {
+    display: none;
+    overflow-x: auto;
+    gap: 8px;
+    padding: 16px 20px;
+    background: #fff;
+    border-bottom: 1px solid var(--rv-border);
+    position: sticky;
+    top: 70px;
+    z-index: 100;
+    scrollbar-width: none;
+}
+.pp-mobile-toc::-webkit-scrollbar { display: none; }
+
+.pp-mobile-pill {
+    display: inline-block;
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 100px;
+    border: 1px solid var(--rv-border);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--rv-muted);
+    text-decoration: none;
+    transition: 0.2s;
+    flex-shrink: 0;
+}
+
+.pp-mobile-pill.active,
+.pp-mobile-pill:hover {
+    background: var(--rv-dark);
+    color: #fff;
+    border-color: var(--rv-dark);
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+    .pp-layout {
+        grid-template-columns: 1fr;
+        padding: 32px 16px 80px;
+    }
+    .pp-sidebar { display: none; }
+    .pp-mobile-toc { display: flex; }
+    .pp-section { padding: 30px 24px; border-radius: 18px; }
+    .pp-section-title { font-size: 1.3rem; }
+    .pp-hero { padding: 90px 20px 50px; }
+    .pp-contact { padding: 36px 24px; }
+}
+
+@media (max-width: 480px) {
+    .pp-hero h1 { letter-spacing: -1px; }
+    .pp-section { padding: 24px 18px; }
+    .pp-list li { padding: 13px 16px; font-size: 0.87rem; }
+}
+</style>
+
+<!-- Reading progress bar -->
+<div class="pp-progress" id="ppProgress"></div>
+
+<!-- Mobile sticky TOC -->
+<div class="pp-mobile-toc" id="mobileToc">
+    <a href="#intro"        class="pp-mobile-pill active">Introduction</a>
+    <a href="#architecture" class="pp-mobile-pill">Data</a>
+    <a href="#usage"        class="pp-mobile-pill">Usage</a>
+    <a href="#cookies"      class="pp-mobile-pill">Cookies</a>
+    <a href="#security"     class="pp-mobile-pill">Security</a>
+    <a href="#contact"      class="pp-mobile-pill">Contact</a>
+</div>
+
+<div class="policy-page">
+
+    <header class="pp-hero">
+        <div class="container">
+            <span class="pp-hero-kicker">Trust &amp; Transparency</span>
+            <h1>Privacy Policy</h1>
+            <p class="pp-hero-date">Last Updated: April 7, 2026</p>
+        </div>
+    </header>
+
+    <div class="pp-layout">
+
+        <!-- Sidebar -->
+        <aside class="pp-sidebar">
+            <span class="pp-sidebar-label">On this page</span>
+            <ul class="pp-nav">
+                <li>
+                    <a href="#intro" class="active">
+                        <span class="pp-nav-num">01</span> Introduction
+                    </a>
+                </li>
+                <li>
+                    <a href="#architecture">
+                        <span class="pp-nav-num">02</span> Data Architecture
+                    </a>
+                </li>
+                <li>
+                    <a href="#usage">
+                        <span class="pp-nav-num">03</span> Intelligence Usage
+                    </a>
+                </li>
+                <li>
+                    <a href="#cookies">
+                        <span class="pp-nav-num">04</span> Digital Footprints
+                    </a>
+                </li>
+                <li>
+                    <a href="#security">
+                        <span class="pp-nav-num">05</span> Security Standards
+                    </a>
+                </li>
+                <li>
+                    <a href="#contact">
+                        <span class="pp-nav-num">06</span> Contact Concierge
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main content -->
+        <main class="pp-content">
+
+            <section id="intro" class="pp-section">
+                <div class="pp-section-header">
+                    <span class="pp-section-num">01.</span>
+                    <h2 class="pp-section-title">Introduction</h2>
+                </div>
+                <p class="pp-text">
+                    Welcome to <strong>Roavista</strong>. We believe privacy is the ultimate luxury.
+                    This policy ensures your data remains as secure as the sanctuaries we host.
+                    By using Roavista you agree to the practices described here.
+                </p>
+            </section>
+
+            <section id="architecture" class="pp-section">
+                <div class="pp-section-header">
+                    <span class="pp-section-num">02.</span>
+                    <h2 class="pp-section-title">Data Architecture</h2>
+                </div>
+                <p class="pp-text">We collect specific touchpoints to tailor the Roavista experience to your lifestyle:</p>
+                <ul class="pp-list">
+                    <li>
+                        <i class="fa-solid fa-user-check"></i>
+                        <span>Verified Identity &amp; Credentials</span>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-location-crosshairs"></i>
+                        <span>Location for Local Sanctuary Discovery</span>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-credit-card"></i>
+                        <span>Secure Transaction Histories</span>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-chart-simple"></i>
+                        <span>Browsing Preferences &amp; Saved Listings</span>
+                    </li>
+                </ul>
+            </section>
+
+            <section id="usage" class="pp-section">
+                <div class="pp-section-header">
+                    <span class="pp-section-num">03.</span>
+                    <h2 class="pp-section-title">Intelligence Usage</h2>
+                </div>
+                <p class="pp-text">
+                    Your data is an instrument used strictly to facilitate instant reservations and
+                    verify host and guest identities for mutual safety. We do not sell, trade, or
+                    rent your personal information to third parties under any circumstance.
+                </p>
+            </section>
+
+            <section id="cookies" class="pp-section">
+                <div class="pp-section-header">
+                    <span class="pp-section-num">04.</span>
+                    <h2 class="pp-section-title">Digital Footprints</h2>
+                </div>
+                <p class="pp-text">
+                    Essential cookies maintain your login state and saved favorites, ensuring your
+                    sanctuary is exactly how you left it. Analytics cookies help us understand how
+                    guests navigate so we can improve the experience. You may disable non-essential
+                    cookies at any time via your browser settings.
+                </p>
+            </section>
+
+            <section id="security" class="pp-section">
+                <div class="pp-section-header">
+                    <span class="pp-section-num">05.</span>
+                    <h2 class="pp-section-title">Security Standards</h2>
+                </div>
+                <p class="pp-text">
+                    Roavista employs 256-bit SSL encryption on all connections. Your information is
+                    encrypted both at rest and in transit, matching global financial-grade security
+                    standards. Our infrastructure undergoes regular independent security audits.
+                </p>
+            </section>
+
+            <div id="contact" class="pp-contact">
+                <div class="pp-contact-icon">
+                    <i class="fa-solid fa-envelope-open-text"></i>
+                </div>
+                <h2>Privacy Concierge</h2>
+                <p>
+                    Need to request data removal or have a question<br>about how your data is handled?
+                    Our team is at your service.
+                </p>
+                <a href="mailto:privacy@roavista.com" class="pp-contact-email">
+                    roavista@gmail.com
+                </a>
+            </div>
+
+        </main>
+    </div>
+</div>
+
+<script>
+(function () {
+    // Reading progress bar
+    const bar = document.getElementById('ppProgress');
+    window.addEventListener('scroll', () => {
+        const total = document.body.scrollHeight - window.innerHeight;
+        bar.style.width = (window.scrollY / total * 100) + '%';
+    });
+
+    // Scroll spy — updates both desktop sidebar and mobile TOC
+    const sections  = Array.from(document.querySelectorAll('.pp-section, #contact'));
+    const sideLinks = document.querySelectorAll('.pp-nav a');
+    const mobLinks  = document.querySelectorAll('.pp-mobile-pill');
+
+    function setActive(id) {
+        [...sideLinks, ...mobLinks].forEach(a => {
+            a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+        });
+    }
+
+    window.addEventListener('scroll', () => {
+        let current = sections[0].id;
+        sections.forEach(sec => {
+            if (window.scrollY >= sec.offsetTop - 160) current = sec.id;
+        });
+        setActive(current);
+    }, { passive: true });
+
+    // Smooth scroll for all anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            e.preventDefault();
+            const target = document.querySelector(a.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+})();
+</script>

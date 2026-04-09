@@ -1,0 +1,173 @@
+<% layout("/layouts/boilerplate") %>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
+
+    :root {
+        --rv-gold: #C4805A;
+        --rv-dark: #1A1A1A;
+        --rv-light-bg: #FAFAFA;
+        --rv-text-muted: #6B7280;
+        --rv-error-red: #D93838;
+        --rv-error-bg: #FFF5F5;
+    }
+
+    .error-section {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--rv-light-bg);
+        font-family: 'Manrope', sans-serif;
+        padding: 4rem 2rem;
+    }
+
+    .error-wrapper {
+        width: 100%;
+        max-width: 650px;
+        text-align: center;
+        animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .icon-container {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 80px;
+        height: 80px;
+        background: var(--rv-error-bg);
+        border-radius: 50%;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 10px 25px rgba(217, 56, 56, 0.15);
+    }
+
+    .error-icon {
+        font-size: 2.5rem;
+        color: var(--rv-error-red);
+    }
+
+    .error-title {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 700;
+        color: var(--rv-dark);
+        margin-bottom: 1rem;
+        line-height: 1.2;
+    }
+
+    .error-msg {
+        color: var(--rv-text-muted);
+        font-size: 1.125rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        padding: 0 1rem;
+        word-wrap: break-word;
+    }
+
+    .btn-return {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        background: var(--rv-dark);
+        color: white;
+        padding: 14px 35px;
+        border-radius: 100px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+
+    .btn-return:hover {
+        background: var(--rv-gold);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(196, 128, 90, 0.2);
+        color: white;
+    }
+
+    /* Terminal-style Stack Trace */
+    .dev-stack-container {
+        margin-top: 3.5rem;
+        text-align: left;
+        background: #1E1E1E; /* Dark terminal bg */
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .dev-stack-header {
+        background: #2D2D2D;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-bottom: 1px solid #333;
+    }
+
+    .mac-dots {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #FF5F56;
+        box-shadow: 20px 0 0 #FFBD2E, 40px 0 0 #27C93F;
+        margin-right: 40px;
+    }
+
+    .dev-stack-title {
+        color: #858585;
+        font-size: 0.85rem;
+        font-family: 'Fira Code', monospace;
+        letter-spacing: 0.5px;
+    }
+
+    .stack-trace-code {
+        padding: 20px;
+        color: #E06C75; /* Soft red text for the error */
+        font-family: 'Fira Code', monospace;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        overflow-x: auto;
+        margin: 0;
+    }
+
+    @keyframes fadeUp {
+        0% { opacity: 0; transform: translateY(20px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+        .dev-stack-container { margin-top: 2.5rem; border-radius: 8px; }
+        .stack-trace-code { padding: 15px; font-size: 0.75rem; }
+    }
+</style>
+
+<section class="error-section">
+    <div class="error-wrapper">
+        
+        <div class="icon-container">
+            <i class="fa-solid fa-triangle-exclamation error-icon"></i>
+        </div>
+
+        <h1 class="error-title">Oops! Something went wrong.</h1>
+        <p class="error-msg"><%= err.message %></p>
+        
+        <a href="/listings" class="btn-return">
+            <i class="fa-solid fa-arrow-left"></i> 
+            <span>Back to Safety</span>
+        </a>
+
+        <% if(process.env.NODE_ENV !== "production" && err.stack) { %>
+            <div class="dev-stack-container">
+                <div class="dev-stack-header">
+                    <span class="mac-dots"></span>
+                    <span class="dev-stack-title">DEVELOPER STACK TRACE</span>
+                </div>
+                <pre class="stack-trace-code"><%= err.stack %></pre>
+            </div>
+        <% } %>
+
+    </div>
+</section>

@@ -1,0 +1,32 @@
+{
+  "name": "roavista",
+  "version": "1.0.0",
+  "description": "Premium Sanctuary Booking Platform",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Atharv Deshmukh",
+  "license": "ISC",
+  "dependencies": {
+    "@mapbox/mapbox-sdk": "^0.16.2",
+    "cloudinary": "^1.41.3",
+    "connect-flash": "^0.1.1",
+    "dotenv": "^17.3.1",
+    "ejs": "^3.1.10",
+    "ejs-mate": "^4.0.0",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "joi": "^18.1.1",
+    "method-override": "^3.0.0",
+    "mongoose": "^8.2.0",
+    "multer": "^1.4.5-lts.1",
+    "multer-storage-cloudinary": "^4.0.0",
+    "node-geocoder": "^4.4.1",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^9.0.1"
+  }
+}

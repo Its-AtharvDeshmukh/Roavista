@@ -1,0 +1,335 @@
+<%- layout("/layouts/boilerplate") %>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
+
+    :root {
+        --rv-gold: #D38B5D;
+        --rv-dark: #1a1a1a;
+        --rv-bg: #fdfdfd;
+        --rv-card-bg: #ffffff;
+    }
+
+    /* GLOBAL FIX: Ensure background covers entire viewport */
+    body {
+        background-color: var(--rv-bg) !important;
+        margin: 0;
+        padding: 0;
+    }
+
+    .terms-page {
+        font-family: 'Manrope', sans-serif;
+        background-color: var(--rv-bg);
+        color: var(--rv-dark);
+        scroll-behavior: smooth;
+        min-height: 100vh; 
+        width: 100%;
+    }
+
+    /* --- Hero Header --- */
+    .terms-hero {
+        padding: 100px 0 60px;
+        background: linear-gradient(to bottom, #f8f5f2, var(--rv-bg));
+        text-align: center;
+    }
+
+    .terms-hero h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(2.2rem, 7vw, 3.8rem);
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+
+    .terms-hero p {
+        font-weight: 800;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: var(--rv-gold);
+        font-size: 0.75rem;
+    }
+
+    /* --- Layout Structure --- */
+    .terms-grid {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 60px;
+        align-items: start;
+        position: relative;
+    }
+
+    /* --- Sticky Sidebar Index --- */
+    .terms-sidebar-column {
+        position: sticky;
+        top: 100px;
+        height: fit-content;
+    }
+
+    .terms-nav-sidebar {
+        padding-left: 0;
+        list-style: none;
+        border-left: 2px solid #eee;
+    }
+
+    .terms-nav-link {
+        display: block;
+        padding: 12px 20px;
+        color: #888;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 0.8rem;
+        transition: all 0.3s ease;
+        margin-left: -2px;
+    }
+
+    .terms-nav-link:hover, .terms-nav-link.active {
+        color: var(--rv-gold);
+        border-left: 2px solid var(--rv-gold);
+        background: linear-gradient(to right, rgba(211, 139, 93, 0.05), transparent);
+    }
+
+    /* --- Content Sections --- */
+    .terms-section {
+        background: var(--rv-card-bg);
+        border-radius: 30px;
+        padding: 50px;
+        margin-bottom: 40px;
+        border: 1px solid #f0f0f0;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+    }
+
+    .head-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 25px;
+        border-bottom: 1px solid #f9f9f9;
+        padding-bottom: 15px;
+    }
+
+    .section-num {
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        color: var(--rv-gold);
+        font-size: 1.5rem;
+    }
+
+    .section-head {
+        font-weight: 800;
+        font-size: 1.7rem;
+        margin: 0;
+    }
+
+    .terms-text {
+        line-height: 1.8;
+        color: #555;
+        font-size: 1rem;
+    }
+
+    /* --- TICKMARK AREA FIX --- */
+    .terms-list {
+        list-style: none; 
+        padding-left: 0;
+        margin-top: 20px;
+    }
+
+    .terms-list li {
+        padding: 15px 20px;
+        background: #fdfdfd;
+        border: 1px solid #f0f0f0;
+        border-radius: 16px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center; 
+        gap: 12px;
+        font-size: 0.95rem;
+        color: #444;
+        font-weight: 500;
+    }
+
+    /* Prevents double icons */
+    .terms-list li::before {
+        display: none !important;
+        content: none !important;
+    }
+
+    .terms-list li i {
+        color: var(--rv-gold);
+        font-size: 1.2rem;
+        flex-shrink: 0; 
+    }
+
+    /* --- Contact Box --- */
+    .contact-card {
+        background: var(--rv-dark);
+        color: white;
+        padding: 40px;
+        border-radius: 30px;
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    .contact-card a {
+        color: var(--rv-gold);
+        font-weight: 700;
+        text-decoration: none;
+        font-size: 1.2rem;
+    }
+
+    @media (max-width: 992px) {
+        .terms-grid { grid-template-columns: 1fr; }
+        .terms-sidebar-column { display: none; }
+        .terms-section { padding: 35px 20px; }
+        .terms-hero { padding: 60px 20px 40px; }
+        .section-head { font-size: 1.4rem; }
+    }
+
+
+
+    /* 1. This targets the very root of the page to kill the white gaps */
+html, body {
+    background-color: #fdfdfd !important; 
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+/* 2. This ensures your wrapper fills the screen even if text is short */
+.terms-page {
+    font-family: 'Manrope', sans-serif;
+    background-color: #fdfdfd; /* Same as --rv-bg */
+    color: #1a1a1a;
+    min-height: 100vh; 
+    display: flex;
+    flex-direction: column;
+}
+
+/* 3. If your navbar is inside a container with a white background, this fixes it */
+nav, .navbar, .boilerplate-nav {
+    background-color: #fdfdfd !important;
+    border-bottom: 1px solid rgba(0,0,0,0.05); /* Optional subtle line */
+}
+</style>
+
+<div class="terms-page">
+    
+    <header class="terms-hero">
+        <div class="container animate-fade-in-up">
+            <p>User Agreement</p>
+            <h1>Terms of Service</h1>
+            <div class="text-muted small fw-bold mt-3">Effective: April 4, 2026</div>
+        </div>
+    </header>
+
+    <div class="container pb-5">
+        <div class="terms-grid">
+            
+            <aside class="terms-sidebar-column">
+                <ul class="terms-nav-sidebar animate-fade-in-left">
+                    <li><a href="#acceptance" class="terms-nav-link active">01. Acceptance</a></li>
+                    <li><a href="#platform" class="terms-nav-link">02. Platform Scope</a></li>
+                    <li><a href="#accounts" class="terms-nav-link">03. User Accounts</a></li>
+                    <li><a href="#financials" class="terms-nav-link">04. Financial Integrity</a></li>
+                    <li><a href="#liability" class="terms-nav-link">05. Liability Limit</a></li>
+                    <li><a href="#hq" class="terms-nav-link">06. Global HQ</a></li>
+                </ul>
+            </aside>
+
+            <main class="animate-fade-in-up">
+                
+                <section id="acceptance" class="terms-section">
+                    <div class="head-wrapper">
+                        <span class="section-num">01.</span>
+                        <h2 class="section-head">Acceptance of Terms</h2>
+                    </div>
+                    <p class="terms-text">
+                        By accessing or using the <strong>Roavista</strong> website, platform, and services, you agree to comply with and be bound by these Terms of Service.
+                    </p>
+                </section>
+
+                <section id="platform" class="terms-section">
+                    <div class="head-wrapper">
+                        <span class="section-num">02.</span>
+                        <h2 class="section-head">The Roavista Platform</h2>
+                    </div>
+                    <p class="terms-text">
+                        Roavista provides a curated marketplace connecting Hosts with Guests. <strong>Roavista does not own or manage any listings.</strong>
+                    </p>
+                </section>
+
+                <section id="accounts" class="terms-section">
+                    <div class="head-wrapper">
+                        <span class="section-num">03.</span>
+                        <h2 class="section-head">User Accounts</h2>
+                    </div>
+                    <p class="terms-text">
+                        To access full booking features, registration is required. You agree to:
+                    </p>
+                    <ul class="terms-list">
+                        <li>
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Maintain absolute security of account credentials.</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Provide accurate profile intelligence.</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Accept responsibility for all activities under your ID.</span>
+                        </li>
+                    </ul>
+                </section>
+
+                <section id="financials" class="terms-section">
+                    <div class="head-wrapper">
+                        <span class="section-num">04.</span>
+                        <h2 class="section-head">Financial Integrity</h2>
+                    </div>
+                    <p class="terms-text">
+                        When a Guest reserves a sanctuary, they agree to pay the total fees identified during checkout.
+                    </p>
+                </section>
+
+                <section id="liability" class="terms-section">
+                    <div class="head-wrapper">
+                        <span class="section-num">05.</span>
+                        <h2 class="section-head">Limitation of Liability</h2>
+                    </div>
+                    <p class="terms-text">
+                        Roavista shall not be liable for any incidental damages resulting from your use of our property collection.
+                    </p>
+                </section>
+
+                <section id="hq" class="contact-card">
+                    <i class="fa-solid fa-building-shield mb-3 fs-1 text-gold"></i>
+                    <h2 class="fw-bold mb-3">Global Headquarters</h2>
+                    <p class="mb-2 small opacity-75">Nagpur, Maharashtra, India</p>
+                    <a href="mailto:roavista@gmail.com">roavista@gmail.com</a>
+                </section>
+
+            </main>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.addEventListener('scroll', () => {
+        let current = "";
+        const sections = document.querySelectorAll("section");
+        const navLinks = document.querySelectorAll(".terms-nav-link");
+
+        sections.forEach((section) => {
+            const sectionTop = section.offsetTop;
+            if (window.pageYOffset >= sectionTop - 150) {
+                current = section.getAttribute("id");
+            }
+        });
+
+        navLinks.forEach((link) => {
+            link.classList.remove("active");
+            if (link.getAttribute("href").includes(current)) {
+                link.classList.add("active");
+            }
+        });
+    });
+</script>

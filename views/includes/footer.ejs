@@ -1,0 +1,138 @@
+<footer class="cloud-footer mt-5">
+    <div class="container text-center text-md-start">
+        <div class="row gy-5 align-items-center">
+            
+            <div class="col-md-4">
+                <div class="footer-brand mb-3">
+                    <img src="/images/Rovista.jpg" alt="Roavista" class="footer-logo">
+                </div>
+                <div class="architects-block mt-2">
+                    <span class="architects-label">Group Project</span>
+                    <p class="architects-names">Developed By Ansh, Atharv & Sujal</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <ul class="footer-links-grid list-unstyled m-0">
+                    <li><a href="/explore">Explore</a></li>
+                    <li><a href="/privacy">Privacy</a></li>
+                    <li><a href="/terms">Terms</a></li>
+                    <li><a href="/creators">Creators</a></li>
+                    <li class="grid-span-full"><a href="https://docs.google.com/forms/d/e/1FAIpQLSeDEz4l2NrFcRXxYajGr3r-AEHv8piyac9HjecRCpgFDhFThg/viewform?usp=dialog">Support</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-4 text-md-end">
+                <div class="social-cluster mb-4">
+                    <a href="https://www.facebook.com/profile.php?id=61577485642291" target="_blank" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="https://www.instagram.com/roavista.official/" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.youtube.com/@RoaVista-yt" target="_blank" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="https://whatsapp.com/channel/0029Vb8LPg5G3R3p7fekYJ1G" target="_blank" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                </div>
+                <div class="copyright">
+                    &copy; <span id="year"></span> Roavista Inc. <br class="d-md-none"> All Rights Reserved.
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom-line mt-5"></div>
+    </div>
+</footer>
+
+<style>
+    .cloud-footer {
+        background-color: #ffffff;
+        padding: 60px 0 30px 0;
+        border-top: 1px solid #f0f0f0;
+        font-family: 'Manrope', sans-serif;
+    }
+
+    .footer-logo {
+        height: 26px;
+        filter: grayscale(0.2);
+    }
+
+    .architects-label {
+        font-size: 0.6rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: #C4805A;
+    }
+
+    .architects-names {
+        font-size: 0.85rem;
+        color: #2A2321;
+        font-weight: 700;
+    }
+
+    /* Mobile-Optimized Grid for Links */
+    .footer-links-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        max-width: 300px;
+        margin: 0 auto !important;
+    }
+
+    .grid-span-full {
+        grid-column: span 2;
+    }
+
+    .footer-links-grid a {
+        text-decoration: none;
+        color: #666;
+        font-size: 0.9rem;
+        font-weight: 700;
+        transition: 0.3s;
+        display: block;
+        padding: 10px; /* Larger tap target */
+    }
+
+    .support-link {
+        color: #C4805A !important;
+        border: 1px solid #F7EBE5;
+        border-radius: 50px;
+        background: #FFFAF8;
+    }
+
+    /* Social Icons Enhancement */
+    .social-cluster a {
+        color: #1a1a1a;
+        font-size: 1.5rem;
+        margin: 0 12px;
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        display: inline-block;
+    }
+
+    .copyright {
+        font-size: 10px;
+        font-weight: 800;
+        color: #bbb;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+
+    .footer-bottom-line {
+        height: 4px;
+        width: 40px;
+        background: linear-gradient(to right, #C4805A, #F7EBE5);
+        margin: 0 auto;
+        border-radius: 10px;
+    }
+
+    /* Desktop Adjustments */
+    @media (min-width: 768px) {
+        .footer-links-grid {
+            display: flex;
+            max-width: none;
+            justify-content: center;
+        }
+        .support-link { border: none; background: transparent; padding: 0; }
+        .social-cluster a { margin-left: 18px; margin-right: 0; font-size: 1.3rem; }
+    }
+</style>
+
+<script>
+    document.getElementById("year").innerText = new Date().getFullYear();
+</script>

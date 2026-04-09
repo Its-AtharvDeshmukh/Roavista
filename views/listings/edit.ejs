@@ -1,0 +1,170 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="atelier-wrapper py-5 mt-3 pt-4">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        
+        <div class="atelier-header mb-4 text-center text-md-start animate-slide-up">
+          <h1 class="atelier-title">Edit Listing</h1>
+          <p class="atelier-subtitle fs-5">Update your property details and availability.</p>
+        </div>
+
+        <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation animate-slide-up" style="animation-delay: 0.1s;" enctype="multipart/form-data">
+          <div class="row g-5">
+            
+            <div class="col-md-7">
+              <div class="atelier-card p-4 p-md-5">
+                
+                <div class="mb-4">
+                  <label for="title" class="atelier-label">Property Title</label>
+                  <input name="listing[title]" id="title" value="<%= listing.title %>" type="text" class="atelier-input w-100" required>
+                  <div class="invalid-feedback">A beautiful title helps you stand out.</div>
+                </div>
+                
+                <div class="mb-4">
+                  <label for="description" class="atelier-label">Description</label>
+                  <div class="invalid-feedback">Tell your guests what they can look forward to.</div>
+                  <textarea name="listing[description]" id="description" class="atelier-input w-100" rows="9" required><%= listing.description %></textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label for="category" class="atelier-label">Property Type</label>
+                    <select name="listing[category]" id="category" class="atelier-input form-select w-100" required style="cursor: pointer; border: none; height: 60px;">
+                        <% const categories = ['Trending', 'Rooms', 'Iconic Cities', 'Mountains', 'Castles', 'Amazing Pools', 'Camping', 'Farms', 'Arctic', 'Domes', 'Boats']; %>
+                        <% for(let cat of categories) { %>
+                            <option value="<%= cat %>" <%= listing.category === cat ? 'selected' : '' %>> 
+                                <%= cat %> 
+                            </option>
+                        <% } %>
+                    </select>
+                    <div class="invalid-feedback">Please select a valid category.</div>
+                </div>
+                
+                <div class="row g-3">
+                  <div class="col-md-8">
+                    <label for="location" class="atelier-label">CITY & STATE</label>
+                    <input name="listing[location]" id="location" value="<%= listing.location %>" type="text" class="atelier-input w-100" required>
+                    <div class="invalid-feedback">Where is this hidden gem?</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label for="country" class="atelier-label">COUNTRY</label>
+                    <input name="listing[country]" id="country" value="<%= listing.country %>" type="text" class="atelier-input w-100" required>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-md-5 mt-0">
+              <div class="atelier-sidebar sticky-top" style="z-index: 10;">
+                
+                <div class="atelier-box p-4 ">
+                  <label for="imageFileInput" class="atelier-label">Update Photos</label>
+                  
+                  <div class="visual-placeholder mb-3 <%= (listing.images && listing.images.length > 0) ? 'has-image' : '' %>" id="imagePreviewBox"
+                       style="<%= (listing.images && listing.images.length > 0) ? `background-image: url('${listing.images[0].url}'); background-size: cover; background-position: center;` : '' %>">
+                    
+                    <% if (!listing.images || listing.images.length === 0) { %>
+                        <i class="fa-solid fa-image-portrait"></i>
+                        <span class="preview-text">Image Preview appears here</span>
+                    <% } %>
+                  </div>
+                  
+                  <input name="listing[images]" id="imageFileInput" type="file" class="atelier-input w-100" accept="image/*" multiple style="padding: 12px; background: transparent; border: 2px dashed rgba(211, 139, 93, 0.4);"> 
+                  <p class="drop-subtext ms-md-3 mt-2">Leave empty to keep current images (Max 5)</p>
+                </div> 
+
+                <div class="publish-glass-box p-4 mt-0">
+                  <label for="price" class="atelier-label">Price per night</label>
+                  <div class="price-input-wrapper mb-4">
+                    <span class="price-symbol">₹</span>
+                    <input name="listing[price]" id="price" value="<%= listing.price %>" type="number" class="atelier-price-input" style="background: transparent; border: none; outline: none; font-size: 1.2rem; font-weight: bold;" required>
+                  </div>
+
+                  <label for="upiId" class="atelier-label text-success"> <i class="fa-brands fa-google-pay me-1"></i> PAYOUT UPI ID</label>
+                  <div class="mb-4">
+                    <input name="listing[upiId]" id="upiId" value="<%= listing.upiId %>" placeholder="e.g. 9876543210@paytm" type="text" class="atelier-input w-100" style="border: 1px solid #198754; background-color: rgba(25, 135, 84, 0.03);" required>
+                    <p class="mt-2 mb-0 subtitle" style="font-size: 0.75rem; color: #198754;">Payments from guests will be sent directly to this UPI ID.</p>
+                  </div>
+                  
+                  <div class="d-flex gap-2">
+                    <button type="submit" class="btn-atelier-launch flex-grow-1" style="padding: 12px; font-weight: bold; background: #1a1a1a; color: white; border-radius: 10px; border: none;">
+                      Save Changes <i class="fa-solid fa-check ms-2"></i>
+                    </button>
+                    
+                  <a href="/listings/<%= listing._id %>" class="btn-soft-danger flex-grow-1">
+                      Cancel
+                  </a>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap');
+  
+  .atelier-title { font-size: xx-large; }
+  .w-100 { width: 100%; }
+  .subtitle { font-size: 0.7rem; }
+  
+  /* Ensure button hover state looks good in flex */
+  .btn-atelier-launch:hover {
+    background: #333 !important;
+    transition: 0.2s ease;
+  }
+
+  .btn-soft-danger {
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    background: #fff5f5; /* Very light red */
+    color: #bc4749; /* Deep muted red */
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .btn-soft-danger:hover {
+    background: #fde8e8;
+    color: #a22c2e;
+  }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const fileInput = document.getElementById('imageFileInput');
+        const previewBox = document.getElementById('imagePreviewBox');
+
+        fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0]; 
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewBox.style.backgroundImage = `url('${e.target.result}')`;
+                    previewBox.style.backgroundSize = 'cover';
+                    previewBox.style.backgroundPosition = 'center';
+                    previewBox.classList.add('has-image');
+                    
+                    const icon = previewBox.querySelector('.fa-image-portrait');
+                    const text = previewBox.querySelector('.preview-text');
+                    if(icon) icon.style.display = 'none';
+                    if(text) text.style.display = 'none';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+</script>

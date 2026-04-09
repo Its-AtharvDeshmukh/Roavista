@@ -1,0 +1,283 @@
+<% layout("/layouts/boilerplate") %>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&display=swap');
+
+    /* ============================================================
+       GLOBAL: "THE NATIVE OS SETTINGS" DESIGN
+       ============================================================ */
+    body {
+        background-color: #F8F9FA; 
+    }
+
+    .profile-master-wrapper {
+        font-family: 'Manrope', sans-serif;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding-bottom: 100px;
+    }
+
+    /* 1. Left Column: The User Identity Card */
+    .identity-card {
+        background: #ffffff;
+        border-radius: 28px;
+        padding: 40px 30px;
+        text-align: center;
+        border: 1px solid rgba(0,0,0,0.04);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        position: sticky;
+        top: 100px;
+        /* Ensure the card doesn't expand past its column */
+        overflow: hidden; 
+    }
+
+    .avatar-glowing {
+        width: 120px;
+        height: 120px;
+        background: linear-gradient(135deg, #C4805A, #E8A885);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin: 0 auto 20px auto;
+        box-shadow: 0 10px 25px rgba(196, 128, 90, 0.3);
+        border: 4px solid #fff;
+    }
+
+    .profile-greeting {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #111;
+        margin-bottom: 5px;
+        /* FIXED: Forces long usernames to wrap inside the card */
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+    }
+
+    .profile-email {
+        font-size: 0.95rem;
+        color: #717171;
+        font-weight: 500;
+        margin-bottom: 20px;
+        /* FIXED: Protects long emails from overflowing too */
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+    }
+
+    .status-badge {
+        display: inline-block;
+        background: #F0F4F8;
+        color: #334155;
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+
+    /* 2. Right Column: Grouped Settings Lists */
+    .settings-section-title {
+        font-size: 0.85rem;
+        font-weight: 800;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin: 0 0 12px 20px;
+    }
+
+    .settings-group {
+        background: #ffffff;
+        border-radius: 24px;
+        border: 1px solid rgba(0,0,0,0.04);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.02);
+        overflow: hidden;
+        margin-bottom: 35px;
+    }
+
+    .settings-item {
+        display: flex;
+        align-items: center;
+        padding: 18px 24px;
+        text-decoration: none !important;
+        background: #fff;
+        transition: all 0.2s ease;
+        border-bottom: 1px solid #f8f8f8;
+    }
+
+    .settings-item:last-child {
+        border-bottom: none;
+    }
+
+    .settings-item:hover {
+        background: #FAFAFA;
+    }
+
+    /* iOS Style Colored Icon Pills */
+    .icon-pill {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.1rem;
+        margin-right: 18px;
+        flex-shrink: 0;
+    }
+
+    .icon-blue { background: #3B82F6; }
+    .icon-green { background: #10B981; }
+    .icon-gold { background: #C4805A; }
+    .icon-indigo { background: #6366F1; }
+    .icon-dark { background: #334155; }
+    .icon-pink { background: #EC4899; }
+    .icon-red { background: #EF4444; }
+
+    .item-text-block {
+        flex-grow: 1;
+    }
+
+    .item-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #111;
+        margin: 0;
+        margin-bottom: 2px;
+    }
+
+    .item-desc {
+        font-size: 0.85rem;
+        color: #888;
+        margin: 0;
+    }
+
+    .item-chevron {
+        color: #ccc;
+        font-size: 0.9rem;
+        margin-left: 15px;
+    }
+
+    /* ============================================================
+       MOBILE OPTIMIZATIONS
+       ============================================================ */
+    @media (max-width: 768px) {
+        .profile-master-wrapper { padding: 15px 15px 100px 15px; }
+
+        .identity-card {
+            padding: 35px 20px;
+            border-radius: 24px;
+            margin-bottom: 30px;
+            position: static; 
+        }
+
+        .avatar-glowing {
+            width: 100px;
+            height: 100px;
+            font-size: 2.8rem;
+        }
+
+        .profile-greeting { font-size: 1.85rem; }
+        .settings-group { border-radius: 20px; margin-bottom: 30px; }
+        .settings-item { padding: 16px 20px; }
+        .icon-pill { width: 38px; height: 38px; font-size: 1.05rem; margin-right: 15px; border-radius: 10px;}
+        .item-title { font-size: 1rem; }
+        .item-desc { display: none; } /* Super clean mobile lists */
+    }
+</style>
+
+<div class="profile-master-wrapper mt-5 fade-in-up">
+    
+    <% if(currUser) { %>
+        <div class="row">
+            
+            <div class="col-12 col-lg-4 mb-4 mb-lg-0">
+                <div class="identity-card">
+                    <div class="avatar-glowing">
+                        <%= currUser.username.charAt(0).toUpperCase() %>
+                    </div>
+                    <h1 class="profile-greeting"><%= currUser.username %></h1>
+                    <p class="profile-email"><%= currUser.email || "Explorer" %></p>
+                    <div class="status-badge">
+                        <i class="fa-solid fa-certificate text-primary me-1"></i> Verified Roavista Member
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-8 ps-lg-5">
+                
+                <h3 class="settings-section-title">Your Management</h3>
+                <div class="settings-group">
+                    <a href="/bookings" class="settings-item">
+                        <div class="icon-pill icon-blue"><i class="fa-solid fa-suitcase-rolling"></i></div>
+                        <div class="item-text-block">
+                            <h4 class="item-title">My Trips</h4>
+                            <p class="item-desc">Upcoming reservations and past sanctuary stays.</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right item-chevron"></i>
+                    </a>
+
+                    <a href="/mylistings" class="settings-item">
+                        <div class="icon-pill icon-gold"><i class="fa-solid fa-house-user"></i></div>
+                        <div class="item-text-block">
+                            <h4 class="item-title">My Listings</h4>
+                            <p class="item-desc">Manage the properties you are hosting on Roavista.</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right item-chevron"></i>
+                    </a>
+
+                    <a href="/reservations" class="settings-item">
+                        <div class="icon-pill icon-green"><i class="fa-solid fa-clipboard-list"></i></div>
+                        <div class="item-text-block">
+                            <h4 class="item-title">Guest Reservations</h4>
+                            <p class="item-desc">Review and manage guests arriving at your listings.</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right item-chevron"></i>
+                    </a>
+                </div>
+
+                <h3 class="settings-section-title">Support & Account</h3>
+                <div class="settings-group">
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSeDEz4l2NrFcRXxYajGr3r-AEHv8piyac9HjecRCpgFDhFThg/viewform?usp=dialog" target="_blank" class="settings-item">
+                        <div class="icon-pill icon-pink"><i class="fa-solid fa-comment-dots"></i></div>
+                        <div class="item-text-block">
+                            <h4 class="item-title">Concierge Help</h4>
+                            <p class="item-desc">Get priority assistance with bookings or hosting.</p>
+                        </div>
+                        <i class="fa-solid fa-arrow-up-right-from-square item-chevron" style="font-size: 0.75rem;"></i>
+                    </a>
+
+                    <a href="/logout" class="settings-item">
+                        <div class="icon-pill icon-red"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
+                        <div class="item-text-block">
+                            <h4 class="item-title text-danger">Sign Out</h4>
+                            <p class="item-desc">Securely end your current session.</p>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+    <% } else { %>
+        <div class="text-center py-5 mt-5 bg-white shadow-sm" style="border-radius: 32px; border: 1px solid #ebebeb;">
+            <div class="avatar-glowing mb-4" style="background: #f0f0f0; color: #ccc; box-shadow: none;">
+                <i class="fa-solid fa-user-lock"></i>
+            </div>
+            <h2 class="fw-bold" style="font-family: 'Playfair Display', serif; font-size: 2.2rem;">Your Roavista Profile</h2>
+            <p class="text-muted mb-4 px-3 mx-auto" style="max-width: 400px;">Log in to manage your trips, properties, and connect with other sanctuary explorers.</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="/login" class="btn btn-dark rounded-pill px-5 py-2 fw-bold shadow-sm">Log in</a>
+                <a href="/signup" class="btn btn-outline-dark rounded-pill px-5 py-2 fw-bold">Sign up</a>
+            </div>
+        </div>
+    <% } %>
+
+
+    
+</div>

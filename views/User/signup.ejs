@@ -1,0 +1,48 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="auth-wrapper">
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+
+    <div class="container d-flex justify-content-center align-items-center auth-container">
+        <div class="auth-card shadow-lg">
+            <div class="auth-header text-center">
+                <div class="auth-icon-circle mx-auto mb-3"><i class="fa-solid fa-compass"></i></div>
+                <h2 class="auth-title">Join Roavista.</h2>
+                <p class="auth-subtitle">Unlock access to the world's most extraordinary homes.</p>
+            </div>
+
+            <form action="/signup" method="POST" class="needs-validation" novalidate>
+                <div class="input-group-custom mb-4">
+                    <div class="input-icon"><i class="fa-regular fa-user"></i></div>
+                    <input type="text" name="username" class="form-control auth-input" placeholder="Choose a Username" required>
+                </div>
+                <div class="input-group-custom mb-4">
+                    <div class="input-icon"><i class="fa-regular fa-envelope"></i></div>
+                    <input type="email" name="email" class="form-control auth-input" placeholder="Email Address" required>
+                </div>
+                <div class="input-group-custom mb-4">
+                    <div class="input-icon"><i class="fa-solid fa-lock"></i></div>
+                    <input type="password" name="password" class="form-control auth-input" placeholder="Create a Password" required>
+                </div>
+                <button class="btn btn-auth w-100 mb-3">Create Account</button>
+            </form>
+
+            <div class="auth-divider"><span>or</span></div>
+
+            <a href="/auth/google" class="btn btn-social w-100 mb-4">
+                <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" alt="Google" class="social-icon">
+                Signup with Google
+            </a>
+
+            <p class="text-center m-0 mt-4 small text-muted">
+                Already have an account? <a href="/login" class="auth-link">Log in</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+
+<style>
+
+</style>

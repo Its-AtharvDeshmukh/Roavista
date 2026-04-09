@@ -1,0 +1,441 @@
+<% layout("/layouts/boilerplate") %>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&display=swap');
+
+    .gallery-wrapper {
+        font-family: 'Manrope', sans-serif;
+        padding: 40px 0 80px 0;
+        background-color: #fafafa;
+        min-height: 100vh;
+    }
+
+    /* ============================================================
+       HEADER STYLING
+       ============================================================ */
+    .gallery-header {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    .gallery-kicker {
+        font-size: 0.85rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: var(--rv-gold, #C4805A);
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .gallery-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #111;
+        margin: 0;
+    }
+
+    /* ============================================================
+       ARTISAN CARDS (CREATOR GRID)
+       ============================================================ */
+    .spotlight-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 30px;
+        margin-bottom: 60px;
+    }
+
+    .artisan-card {
+        background: #ffffff;
+        border-radius: 28px;
+        padding: 40px 30px;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(0,0,0,0.04);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .artisan-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+    }
+
+    /* Background Watermark Letter */
+    .watermark-letter {
+        position: absolute;
+        top: -30px;
+        right: 10px;
+        font-size: 180px;
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        color: rgba(0,0,0,0.02);
+        line-height: 1;
+        z-index: 0;
+        user-select: none;
+        pointer-events: none;
+    }
+
+    .lead-badge {
+        position: absolute;
+        top: 25px;
+        right: 25px;
+        background: var(--rv-gold, #C4805A);
+        color: white;
+        padding: 6px 14px;
+        border-radius: 30px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        z-index: 2;
+        box-shadow: 0 4px 10px rgba(196, 128, 90, 0.3);
+    }
+
+    .artisan-role {
+        font-size: 0.8rem;
+        font-weight: 800;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        z-index: 2;
+        position: relative;
+    }
+
+    .artisan-name {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #111;
+        margin: 5px 0 15px 0;
+        z-index: 2;
+        position: relative;
+    }
+
+    .artisan-desc {
+        font-size: 0.95rem;
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 25px;
+        z-index: 2;
+        position: relative;
+        flex-grow: 1; /* Pushes tech and links to the bottom evenly */
+    }
+
+    .artisan-tech {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 25px;
+        z-index: 2;
+        position: relative;
+    }
+
+    .artisan-tech span {
+        background: #f4f4f5;
+        color: #3f3f46;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-size: 0.75rem;
+        font-weight: 700;
+    }
+
+    .artisan-links {
+        display: flex;
+        gap: 12px;
+        z-index: 2;
+        position: relative;
+    }
+
+    .a-link {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: #111;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 1.1rem;
+        transition: 0.3s ease;
+    }
+
+    .a-link:hover {
+        background: var(--rv-gold, #C4805A);
+        color: white;
+        transform: translateY(-3px);
+    }
+
+    /* ============================================================
+       HORIZONTAL SCROLL TECH STACK
+       ============================================================ */
+    .master-stack {
+        margin: 60px 0;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .stack-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #111;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .stack-ticker-wrapper {
+        position: relative;
+        width: 100%;
+        -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+        mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+    }
+
+    .stack-ticker-inner {
+        display: flex;
+        gap: 15px;
+        overflow-x: auto;
+        padding: 5px 20px 20px 20px; 
+        scrollbar-width: none; 
+        -ms-overflow-style: none; 
+    }
+
+    .stack-ticker-inner::-webkit-scrollbar {
+        display: none;
+    }
+
+    .stack-pill {
+        flex: 0 0 auto; 
+        background: #ffffff;
+        border: 1px solid #ebebeb;
+        padding: 12px 24px;
+        border-radius: 100px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #444;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        cursor: default;
+    }
+
+    .stack-pill i {
+        font-size: 1.2rem;
+        color: var(--rv-gold, #C4805A);
+    }
+
+    .stack-pill:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+        border-color: #d1d1d1;
+        color: #111;
+    }
+
+    /* Mobile Adjustments */
+    @media (max-width: 768px) {
+        .gallery-title { font-size: 2.5rem; }
+        .gallery-wrapper { padding: 20px 0 100px 0; }
+        .watermark-letter { font-size: 140px; top: -10px; }
+        .artisan-card { padding: 30px 20px; }
+    }
+
+    /* ============================================================
+       AUTO-SCROLLING TECH STACK (INFINITE MARQUEE)
+       ============================================================ */
+    .master-stack {
+        margin: 60px 0;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .stack-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #111;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .stack-ticker-wrapper {
+        position: relative;
+        width: 100%;
+        overflow: hidden; /* Hides the overflowing infinite track */
+        /* Fade edges for a premium look */
+        -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+        mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+    }
+
+    .stack-ticker-inner {
+        display: flex;
+        gap: 15px;
+        width: max-content; /* Crucial: Allows the container to stretch as long as the content */
+        padding: 5px 0 20px 0;
+        
+        /* The Magic Auto-Scroll Animation */
+        animation: autoScrollTicker 30s linear infinite;
+    }
+
+    /* Pause the scroll when the user hovers over it */
+    .stack-ticker-inner:hover {
+        animation-play-state: paused;
+    }
+
+    .stack-pill {
+        flex: 0 0 auto; 
+        background: #ffffff;
+        border: 1px solid #ebebeb;
+        padding: 12px 24px;
+        border-radius: 100px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #444;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        cursor: default;
+    }
+
+    .stack-pill i {
+        font-size: 1.2rem;
+        color: var(--rv-gold, #C4805A);
+    }
+
+    .stack-pill:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+        border-color: #d1d1d1;
+        color: #111;
+    }
+
+    /* Animation logic: shifts left by exactly half the width (1 set of items) minus half the gap */
+    @keyframes autoScrollTicker {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(calc(-50% - 7.5px)); } 
+    }
+</style>
+
+<div class="gallery-wrapper">
+    <div class="container fade-in-up">
+        
+        <header class="gallery-header">
+            <span class="gallery-kicker">THE TEAM BEHIND ROAVISTA</span>
+            <h1 class="gallery-title">Built by Passion. Driven by Innovation.</h1>
+        </header>
+
+     <div class="spotlight-grid">
+            
+    <div class="artisan-card">
+        <span class="watermark-letter">A</span>
+        <div class="lead-badge">Research</div>
+        <span class="artisan-role">Design & Experience</span>
+        <h2 class="artisan-name">Ansh Shanane</h2>
+        <p class="artisan-desc">
+            Crafting the visual identity of Roavista. Ansh focuses on building intuitive and elegant interfaces that deliver a seamless and premium user experience.
+        </p>
+        <div class="artisan-tech">
+            <span>UI/UX</span>
+            <span>CSS3</span>
+            <span>Interactions</span>
+        </div>
+        <div class="artisan-links">
+            <a href="https://github.com/A679749" target="_blank" class="a-link"><i class="fa-brands fa-github"></i></a>
+            <a href="#" target="_blank" class="a-link"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="https://www.instagram.com/ansh__sh_01/" target="_blank" class="a-link"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+    </div>
+
+    <div class="artisan-card" style="border: 2px solid rgba(196, 128, 90, 0.2);">
+        <span class="watermark-letter">A</span>
+        <div class="lead-badge">Project Lead</div>
+        <span class="artisan-role">Full-Stack</span>
+        <h2 class="artisan-name">Atharv Deshmukh</h2>
+        <p class="artisan-desc">
+            Driving the core architecture of Roavista. Atharv built the backend systems, authentication, geospatial logic, and database structure that power the platform reliably and securely.
+        </p>
+        <div class="artisan-tech">
+            <span>Node.js</span>
+            <span>Express.js</span>
+            <span>MongoDB</span>
+            <span>System Design</span>
+        </div>
+        <div class="artisan-links">
+            <a href="https://github.com/Its-AtharvDeshmukh" target="_blank" class="a-link"><i class="fa-brands fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/atharv-deshmukh-711909372/" target="_blank" class="a-link"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="https://www.instagram.com/_atharv_deshmukh__/" target="_blank" class="a-link"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+    </div>
+
+    <div class="artisan-card">
+        <span class="watermark-letter">S</span>
+        <span class="artisan-role">Frontend Developer</span>
+        <div class="lead-badge">Frontend</div>
+        <h2 class="artisan-name">Sujal Arse</h2>
+        <p class="artisan-desc">
+            Bringing designs to life through clean and responsive code. Sujal builds scalable UI components that adapt smoothly across all devices and screen sizes.
+        </p>
+        <div class="artisan-tech">
+            <span>Bootstrap</span>
+            <span>EJS Templates</span>
+            <span>Layouts</span>
+        </div>
+        <div class="artisan-links">
+            <a href="https://github.com/sujalarse" target="_blank" class="a-link"><i class="fa-brands fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/sujal-arse-87b847373/" target="_blank" class="a-link"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="https://www.instagram.com/sujalarse/?next=" target="_blank" class="a-link"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+    </div>
+
+</div>
+      
+
+       <div class="master-stack">
+    <h4 class="stack-title">Built with Modern Technologies</h4>
+    
+    <div class="stack-ticker-wrapper">
+        <div class="stack-ticker-inner">
+            <% 
+               const techStack = [
+                 { name: 'Node.js Runtime', icon: 'fa-node-js', isBrand: true },
+                 { name: 'Express Framework', icon: 'fa-server', isBrand: false },
+                 { name: 'MongoDB Atlas', icon: 'fa-database', isBrand: false },
+                 { name: 'Passport.js Auth', icon: 'fa-shield-halved', isBrand: false },
+                 { name: 'Google OAuth 2.0', icon: 'fa-google', isBrand: true },
+                 { name: 'Render Deployment', icon: 'fa-cloud-arrow-up', isBrand: false },
+                 { name: 'Cloudinary Storage', icon: 'fa-cloud', isBrand: false },
+                 { name: 'Mapbox SDK', icon: 'fa-map-location-dot', isBrand: false },
+                 { name: 'Bootstrap 5', icon: 'fa-bootstrap', isBrand: true },
+                 { name: 'EJS-Mate Engine', icon: 'fa-code', isBrand: false },
+                 { name: 'Connect-Flash', icon: 'fa-envelope-open-text', isBrand: false },
+                 { name: 'Joi Validation', icon: 'fa-file-code', isBrand: false }
+               ];
+            %>
+            
+            <% techStack.forEach(tech => { %>
+                <div class="stack-pill">
+                    <i class="<%= tech.isBrand ? 'fa-brands' : 'fa-solid' %> <%= tech.icon %>"></i> 
+                    <%= tech.name %>
+                </div>
+            <% }) %>
+
+            <% techStack.forEach(tech => { %>
+                <div class="stack-pill" aria-hidden="true">
+                    <i class="<%= tech.isBrand ? 'fa-brands' : 'fa-solid' %> <%= tech.icon %>"></i> 
+                    <%= tech.name %>
+                </div>
+            <% }) %>
+
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>

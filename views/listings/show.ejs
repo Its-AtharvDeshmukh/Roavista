@@ -1,0 +1,586 @@
+<%- layout("/layouts/boilerplate") %>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src='https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css' rel='stylesheet' />
+
+<div class="roavista-wrapper py-5">
+    <div class="container-fluid px-lg-5">
+        <div class="row g-5 mb-5 align-items-stretch">
+            
+            <div class="col-lg-7 animate-fade-in-left">
+                <div class="main-image-container shadow-sm position-relative">
+                    <% if(listing.images && listing.images.length > 0) { %>
+                        <img src="<%= listing.images[0].url %>" alt="<%= listing.title %>" class="main-image">
+                    <% } %>
+
+                    <% if(listing.images && listing.images.length > 1) { %>
+                        <a href="/listings/<%= listing._id %>/images" class="position-absolute bottom-0 end-0 m-4 btn btn-light rounded-pill px-3 py-2 fw-bold shadow-sm" style="z-index: 10; font-size: 0.8rem; color: var(--rv-text); transition: 0.3s;">
+                            <i class="fa-solid fa-grip-vertical me-2"></i> Show all <%= listing.images.length %> photos
+                        </a>
+                    <% } %>
+
+                    <div class="ci-location-pill-overlay animate-float">
+                        <i class="fa-solid fa-location-dot ci-loc-icon"></i>
+                        <span class="ci-loc-text"><%= listing.location %>, <%= listing.country %></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5 animate-fade-in-right">
+                <div class="creative-info-card shadow-premium">
+                    <div class="ci-header d-flex justify-content-between align-items-start">
+                        <h1 class="ci-title"><%= listing.title %></h1>
+                        <div class="ci-user-trigger">
+                            <div class="ci-icon-circle"><i class="fa-solid fa-user-shield"></i></div>
+                            <div class="ci-account-popover shadow-lg">
+                                <span class="pop-label">Verified Host</span>
+                                <div class="d-flex align-items-center gap-3 mt-2">
+                                    <div class="pop-avatar"><%= listing.owner.username.substring(0,1).toUpperCase() %></div>
+                                    <div class="pop-meta text-start">
+                                        <h6 class="m-0 fw-bold">@<%= listing.owner.username %></h6>
+                                        <p class="m-0 text-gold extra-small">Roavista Platinum</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="ci-divider">
+                    <div class="ci-desc-header">About this property</div>
+                    <div class="ci-scroll-content">
+                        <div class="ci-description-wrapper mt-2">
+                            <p class="ci-desc-text"><%= listing.description %></p>
+                        </div>
+                    </div>
+                    <hr class="ci-divider">
+
+                    <div class="ci-price-container mb-4">
+                        <div class="ci-price-main">
+                            <span class="ci-currency">₹</span>
+                            <span class="ci-amount"><%= listing.price.toLocaleString("en-IN") %></span>
+                        </div>
+                        <div class="ci-price-label"> per night</div>
+                    </div>
+
+                    <div class="ci-footer mt-auto">
+                        <form action="/listings/<%= listing._id %>/book" method="POST" id="bookingForm">
+                            <div class="ci-date-picker">
+                                <div class="ci-date-cell border-end">
+                                    <label>Select CHECK-In Date</label>
+                                    <input type="date" id="checkIn" class="input-color" name="checkIn" required>
+                                </div>
+                                <div class="ci-date-cell">
+                                    <label>Select CHECK-OUT Date</label>
+                                    <input type="date" id="checkOut" class="input-color" name="checkOut" required>
+                                </div>
+                            </div>
+                            
+                           <% if(currUser) { %>
+                                <button type="button" 
+                                    onclick="generatePaymentQR('<%= listing.upiId %>', '<%= listing.price %>', `<%= listing.title %>`)" 
+                                    class="ci-btn-reserve w-100 hover-lift mt-3">
+                                Reserve Sanctuary
+                            </button>
+                            <% } else { %>
+                                <a href="/login" class="btn ci-btn-reserve w-100 hover-lift mt-3 d-flex align-items-center justify-content-center text-decoration-none">
+                                    Login to book
+                                </a>
+                            <% } %>
+                        </form>
+
+                        <% if(currUser && listing.owner && (currUser._id.equals(listing.owner._id) || isAdmin)) { %>
+                        <div class="d-flex gap-3 mt-3">
+                            <a href="/listings/<%= listing._id %>/edit" class="ci-btn-secondary w-50 hover-lift text-center text-decoration-none ">Edit Listing</a>
+                            <form method="POST" action="/listings/<%=listing._id%>?_method=DELETE" class="w-50 m-0">
+                                <button class="ci-btn-danger w-100 hover-lift">Delete Listing</button>
+                            </form>
+                        </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="divider-line mb-5">
+
+        <div class="row g-5 align-items-start mb-5 pb-4">
+            <div class="col-md-4 animate-fade-in-up" style="animation-delay: 0.2s;">
+                <div class="review-form-card sticky-form shadow-premium">
+                    <h2 class="review-form-title">Write a Review</h2>
+                    <form action="/listings/<%= listing._id %>/reviews" method="POST" class="needs-validation" novalidate>
+                        <div class="mb-4">
+                            <label class="form-micro-label">Your Rating</label>
+                            <div class="interactive-stars">
+                                <input type="radio" id="st5" name="review[rating]" value="5" /><label for="st5"><i class="fa-solid fa-star"></i></label>
+                                <input type="radio" id="st4" name="review[rating]" value="4" /><label for="st4"><i class="fa-solid fa-star"></i></label>
+                                <input type="radio" id="st3" name="review[rating]" value="3" /><label for="st3"><i class="fa-solid fa-star"></i></label>
+                                <input type="radio" id="st2" name="review[rating]" value="2" /><label for="st2"><i class="fa-solid fa-star"></i></label>
+                                <input type="radio" id="st1" name="review[rating]" value="1" checked /><label for="st1"><i class="fa-solid fa-star"></i></label>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-micro-label mb-1">Your Comment</label>
+                            <textarea name="review[comment]" class="comment-input-box" rows="6" required placeholder="Tell future guests about your experience"></textarea>
+                        </div>
+                        <button class="btn-dark-action w-100 hover-lift">Submit Review</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-8 animate-fade-in-up" style="animation-delay: 0.4s;">
+                <h3 class="gallery-title mb-4">Guest Experiences</h3>
+                <% if(listing.reviews.length === 0) { %>
+                    <div class="empty-reviews-box p-5 text-center"><p class="text-muted m-0">No reviews yet  
+                                                                                        <br>Be the first to share your experience</p></div>
+                <% } else { %>
+                    <div class="two-row-review-grid">
+                        <% for(let review of listing.reviews) { %>
+                        <div class="creative-review-card shadow-sm hover-scale">
+                            <div class="cr-header d-flex align-items-center gap-3">
+                                <div class="cr-avatar"><%= review.author.username.substring(0,2).toUpperCase() %></div>
+                                <div class="cr-meta">
+                                    <div class="cr-username">@<%= review.author.username %></div>
+                                    <div class="cr-stars">
+                                        <% for(let i=1; i<=5; i++) { %>
+                                            <i class="fa-solid fa-star <%= i <= review.rating ? 'filled' : 'empty' %>"></i>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="cr-comment">"<%= review.comment %>"</p>
+                            <% if(currUser && (currUser._id.equals(review.author._id) || isAdmin)) { %>
+                                <div class="cr-footer">
+                                    <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" class="m-0">
+                                        <button class="cr-btn-delete hover-lift">Delete</button>
+                                    </form>
+                                </div>
+                            <% } %>
+                        </div>
+                        <% } %>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+
+        <hr class="divider-line mt-0">
+
+        <div class="row pb-5 animate-fade-in-up">
+            <div class="col-12">
+                <h3 class="gallery-title mb-4">Where you'll be staying</h3>
+                <div class="map-container shadow-sm"><div id="map"></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+    <div id="payment-modal" class="custom-payment-modal">
+        <div class="modal-content-luxe animate-fade-in-up">
+            <div class="modal-header-luxe mb-3">
+                <i class="fa-solid fa-gem text-gold mb-2" style="font-size: 1.5rem; color: #D38B5D;"></i>
+                <h3 class="fw-bold mb-1 gallery-title text-dark" id="modalListingTitle">Secure Booking</h3>
+                <p class="text-muted small m-0">Complete Your Booking</p>
+            </div>
+            
+            <div class="price-showcase my-3 py-3 px-4">
+                <p class="text-muted mb-1 fw-bold text-uppercase" style="font-size: 0.75rem; letter-spacing: 1.5px;">Total Payment</p>
+                <h2 class="fw-bold m-0" style="color: #1a1a1a; font-family: 'Playfair Display', serif;">
+                    ₹<span id="total-price-display">0</span>
+                </h2>
+            </div>
+            
+            <div id="qrcode-container" class="qr-luxe-wrapper mx-auto my-3"></div>
+
+            <p class="extra-small text-muted italic mb-3">Paying to: <span id="modalUpi" class="fw-bold"></span></p>
+
+            <div class="luxe-alert alert small mb-4 d-flex align-items-center justify-content-center gap-2" id="payment-instruction">
+                <i class="fa-solid fa-qrcode"></i> Scan to pay using any UPI app
+            </div>
+            
+            <div class="d-flex gap-3 mt-3">
+                <button type="button" onclick="closePayment()" id="cancel-pay-btn" class="btn btn-outline-dark rounded-pill flex-grow-1 luxe-btn-cancel fw-bold py-2">Cancel</button>
+                <button type="button" onclick="submitBooking()" id="confirm-pay-btn" class="btn btn-dark rounded-pill flex-grow-1 luxe-btn-pay fw-bold py-2">Confirm Payment</button>
+            </div>
+        </div>
+    </div>
+
+<!-- --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+<script>
+    // ---------------------------------------------------------
+    // 1. MAPBOX INITIALIZATION & SETUP
+    // ---------------------------------------------------------
+    mapboxgl.accessToken = '<%= mapToken %>';
+    const coordinates = <%- JSON.stringify(listing.geometry.coordinates) %>;
+
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/satellite-streets-v12',
+        center: coordinates, 
+        zoom: 11,
+        pitch: 0,
+        bearing: 0, 
+        antialias: true,
+        scrollZoom: false
+    });
+
+    map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), 'top-right');
+
+    map.on('style.load', () => {
+        map.setFog({
+            'color': 'rgb(186, 210, 235)',
+            'high-color': 'rgb(36, 122, 227)',
+            'horizon-blend': 0.02,
+            'space-color': 'rgb(11, 11, 25)',
+            'star-intensity': 0.15
+        });
+
+        map.addSource('mapbox-dem', {
+            'type': 'raster-dem',
+            'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
+            'tileSize': 512,
+            'maxzoom': 14
+        });
+        map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.5 });
+
+        map.addLayer({
+            'id': '3d-buildings',
+            'source': 'composite',
+            'source-layer': 'building',
+            'filter': ['==', 'extrude', 'true'],
+            'type': 'fill-extrusion',
+            'minzoom': 15,
+            'paint': {
+                'fill-extrusion-color': '#e8e8e8',
+                'fill-extrusion-height': ['interpolate', ['linear'], ['zoom'], 15, 0, 15.05, ['get', 'height']],
+                'fill-extrusion-base': ['interpolate', ['linear'], ['zoom'], 15, 0, 15.05, ['get', 'min_height']],
+                'fill-extrusion-opacity': 0.8
+            }
+        });
+
+        setTimeout(() => {
+            map.flyTo({
+                center: coordinates,
+                zoom: 15.5,
+                pitch: 65,
+                bearing: -25,
+                duration: 4500,
+                essential: true
+            });
+        }, 500);
+    });
+
+    const el = document.createElement('div');
+    el.className = 'roavista-premium-marker';
+    el.innerHTML = '<i class="fa-solid fa-house-chimney"></i>';
+    new mapboxgl.Marker(el).setLngLat(coordinates).addTo(map);
+
+    // ---------------------------------------------------------
+    // 2. AUTO-SCROLL LOGIC FOR REVIEWS
+    // ---------------------------------------------------------
+    document.addEventListener('DOMContentLoaded', () => {
+        const reviewContainer = document.querySelector('.two-row-review-grid');
+        if (!reviewContainer || reviewContainer.children.length === 0) return;
+
+        let autoScrollInterval;
+        let isUserInteracting = false;
+
+        const startAutoScroll = () => {
+            if (isUserInteracting) return;
+            autoScrollInterval = setInterval(() => {
+                if (reviewContainer.scrollLeft >= (reviewContainer.scrollWidth - reviewContainer.clientWidth - 1)) {
+                    reviewContainer.scrollTo({ left: 0, behavior: 'smooth' });
+                } else {
+                    reviewContainer.scrollLeft += 1;
+                }
+            }, 30);
+        };
+
+        startAutoScroll();
+
+        const stopScroll = () => {
+            isUserInteracting = true;
+            clearInterval(autoScrollInterval);
+            reviewContainer.style.scrollSnapType = "x mandatory";
+        };
+
+        const resumeScroll = () => {
+            setTimeout(() => {
+                isUserInteracting = false;
+                reviewContainer.style.scrollSnapType = "none";
+                startAutoScroll();
+            }, 3000);
+        };
+
+        reviewContainer.addEventListener('touchstart', stopScroll, { passive: true });
+        reviewContainer.addEventListener('touchend', resumeScroll, { passive: true });
+        reviewContainer.addEventListener('mouseenter', stopScroll);
+        reviewContainer.addEventListener('mouseleave', resumeScroll);
+    });
+
+    // ---------------------------------------------------------
+    // 3. UPI PAYMENT LOGIC (WITH VERIFICATION DELAY)
+    // ---------------------------------------------------------
+    let countdownTimer;
+
+    function closePayment() {
+        document.getElementById("payment-modal").style.display = "none";
+        
+        if (countdownTimer) clearInterval(countdownTimer);
+        const confirmBtn = document.getElementById("confirm-pay-btn");
+        const cancelBtn = document.getElementById("cancel-pay-btn");
+        
+        confirmBtn.disabled = false;
+        cancelBtn.disabled = false;
+        confirmBtn.innerHTML = "I have Paid";
+        confirmBtn.style.backgroundColor = ""; 
+        confirmBtn.style.color = "";
+    }
+
+    function submitBooking() {
+        const confirmBtn = document.getElementById("confirm-pay-btn");
+        const cancelBtn = document.getElementById("cancel-pay-btn");
+        const instructionAlert = document.getElementById("payment-instruction");
+
+        confirmBtn.disabled = true;
+        cancelBtn.disabled = true;
+        
+        instructionAlert.innerHTML = `<i class="fa-solid fa-shield-halved"></i> Verifying payment securely...`;
+        
+        let timeLeft = 10; // Change to 60 if you want a full 1 minute wait
+        confirmBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin me-2"></i> Verifying... ${timeLeft}s`;
+        
+        countdownTimer = setInterval(() => {
+            timeLeft--;
+            
+            if (timeLeft > 0) {
+                confirmBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin me-2"></i> Verifying... ${timeLeft}s`;
+            } else {
+                clearInterval(countdownTimer);
+                
+                confirmBtn.innerHTML = `<i class="fa-solid fa-check me-2"></i> Payment Confirmed!`;
+                confirmBtn.style.backgroundColor = "#198754"; 
+                confirmBtn.style.color = "#ffffff";
+                
+                instructionAlert.innerHTML = `<i class="fa-solid fa-circle-check" style="color: #198754;"></i> Reservation secured! Redirecting...`;
+
+                setTimeout(() => {
+                    closePayment();
+                    document.getElementById("bookingForm").submit();
+                }, 1500);
+            }
+        }, 1000); 
+    }
+    
+    function generatePaymentQR(upiId, price, title) {
+        const checkInInput = document.getElementById("checkIn");
+        const checkOutInput = document.getElementById("checkOut");
+
+        // 1. Validate Date Selection
+        if (!checkInInput.value || !checkOutInput.value) {
+            alert("Please select your Check-In and Check-Out dates first.");
+            return;
+        }
+
+        const d1 = new Date(checkInInput.value);
+        const d2 = new Date(checkOutInput.value);
+        const nights = Math.ceil((d2 - d1) / (1000 * 60 * 60 * 24));
+
+        if (nights <= 0) {
+            alert("Check-out date must be after check-in date.");
+            return;
+        }
+
+        // 2. Automatic UPI ID Fallback Logic
+        // If the listing upiId is missing or empty, it uses your specific ID
+        const fallbackUpi = "atharavdeshmukh028-7@okaxis";
+        const finalUpi = (upiId && upiId !== "" && upiId !== "undefined" && upiId !== "null") 
+                        ? upiId 
+                        : fallbackUpi;
+
+        const total = price * nights;
+        
+        // 3. Update Modal Interface
+        document.getElementById("modalListingTitle").innerText = title;
+        document.getElementById("total-price-display").innerText = total.toLocaleString("en-IN");
+        document.getElementById("modalUpi").innerText = finalUpi;
+
+        // 4. Clear and Generate the QR Code
+        const qrBox = document.getElementById("qrcode-container");
+        qrBox.innerHTML = ""; 
+        
+        const upiURL = `upi://pay?pa=${finalUpi}&pn=Roavista&am=${total}&cu=INR&tn=Booking_${encodeURIComponent(title)}`;
+
+        new QRCode(qrBox, {
+            text: upiURL,
+            width: 170,
+            height: 170,
+            colorDark : "#1a1a1a",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.M
+        });
+
+        // 5. Open the Modal
+        document.getElementById("payment-modal").style.display = "flex";
+    }
+</script>
+
+<style>
+/* ============================================================
+   1. BASE & SHARED COMPONENTS
+   ============================================================ */
+.roavista-wrapper { overflow-x: hidden; }
+.gallery-title { font-size: 2rem; font-family: 'Playfair Display', serif; }
+
+/* Custom Marker */
+.roavista-premium-marker {
+    width: 45px; height: 45px;
+    background: #D38B5D; border: 3px solid #fff; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 15px rgba(211, 139, 93, 0.6);
+    animation: pulse-glow 2s infinite; cursor: pointer; z-index: 2;
+}
+.roavista-premium-marker i { color: #fff; font-size: 1.2rem; }
+
+@keyframes pulse-glow {
+    0% { box-shadow: 0 0 0 0 rgba(211, 139, 93, 0.7); }
+    70% { box-shadow: 0 0 0 20px rgba(211, 139, 93, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(211, 139, 93, 0); }
+}
+
+/* ============================================================
+   2. MAP COMPONENT
+   ============================================================ */
+.map-container {
+    width: 100%; border-radius: 24px; overflow: hidden;
+    border: 1px solid #eee; box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease; margin-bottom: 2rem; height: 500px; 
+}
+#map { width: 100%; height: 100%; }
+.map-container:hover { transform: scale(1.005); }
+
+/* ============================================================
+   3. REVIEWS GRID
+   ============================================================ */
+.two-row-review-grid {
+    display: grid; grid-template-rows: repeat(2, 1fr);
+    grid-auto-flow: column; grid-auto-columns: 320px;
+    gap: 1.5rem; overflow-x: auto; padding-bottom: 1rem;
+    scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: auto;
+}
+.two-row-review-grid::-webkit-scrollbar { display: none; }
+
+.creative-review-card {
+    background: #fff; border-radius: 20px; padding: 22px; border: 1px solid #eee;
+    backface-visibility: hidden; transform: translateZ(0); transition: transform 0.3s ease;
+}
+.input-color {
+    color: #D38B5D;
+}
+
+@media (hover: hover) {
+    .creative-review-card:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05); z-index: 5;
+    }
+}
+
+/* ============================================================
+   4. LUXURY MODAL & PAYMENTS
+   ============================================================ */
+.custom-payment-modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(15, 15, 20, 0.75); backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px); display: none;
+    align-items: center; justify-content: center; z-index: 9999;
+}
+
+.modal-content-luxe {
+    background: #ffffff; padding: 35px 40px; border-radius: 24px; text-align: center;
+    max-width: 420px; width: 90%; box-shadow: 0 30px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(211, 139, 93, 0.2) inset;
+    position: relative; overflow: hidden;
+}
+
+.modal-content-luxe::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px;
+    background: linear-gradient(90deg, #D38B5D, #e6b08e);
+}
+
+.price-showcase {
+    background: #fdfbf9; border-radius: 16px; border: 1px solid rgba(211, 139, 93, 0.3); padding: 15px;
+}
+
+.qr-luxe-wrapper {
+    padding: 15px; background: #fff; border-radius: 16px; border: 1px solid #eaeaea;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.04); display: inline-flex;
+    justify-content: center; align-items: center; margin: 20px 0;
+}
+
+.upi-badge {
+    background: #ffffff; border: 1px solid rgba(211, 139, 93, 0.5); color: #1a1a1a;
+    padding: 4px 14px; border-radius: 20px; font-size: 0.75rem; display: inline-flex;
+    align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(211, 139, 93, 0.1);
+    transition: 0.3s ease;
+}
+.upi-badge:hover {
+    background: #fdfbf9; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(211, 139, 93, 0.2);
+}
+
+.luxe-btn-pay { background: #1a1a1a; border: none; transition: 0.3s ease; }
+.luxe-btn-pay:hover:not(:disabled) { background: #D38B5D !important; transform: translateY(-2px); }
+
+/* ============================================================
+   5. PERFECT MOBILE REFINEMENT (CONSOLIDATED & FIXED)
+   ============================================================ */
+@media (max-width: 991px) {
+    body { background: #fff; padding-bottom: 95px !important; }
+    .roavista-wrapper { padding-top: 10px !important; }
+
+    .main-image-container { height: auto !important; border-radius: 22px !important; margin-bottom: 15px; }
+    .main-image { height: 45vh !important; min-height: 260px; width: 100%; object-fit: cover; border-radius: 22px; }
+
+    .creative-info-card { padding: 22px !important; border-radius: 22px !important; box-shadow: none !important; border: 1px solid #eee; margin-top: 10px; }
+    .ci-title { font-size: 1.75rem !important; line-height: 1.25; letter-spacing: -0.5px; }
+    
+    .ci-scroll-content { max-height: 160px; overflow-y: auto; padding-right: 8px; margin-top: 10px; scrollbar-width: thin; scrollbar-color: #D38B5D #f0f0f0; }
+    .ci-scroll-content::-webkit-scrollbar { width: 4px; }
+    .ci-scroll-content::-webkit-scrollbar-thumb { background: #D38B5D; border-radius: 10px; }
+    .ci-desc-text { font-size: 0.95rem; line-height: 1.6; color: #555; }
+
+    .ci-date-picker { display: flex; border-radius: 14px; overflow: hidden; border: 1px solid #ddd; }
+    .ci-date-cell { width: 50%; padding: 10px 14px; }
+    .ci-date-cell label { font-size: 0.65rem; font-weight: 800; letter-spacing: 1px;  }
+    
+    .ci-btn-reserve { height: 54px; border-radius: 14px; font-size: 1rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+
+    /* Mobile Review Carousel */
+    .two-row-review-grid {
+        display: flex !important; grid-template-rows: none; gap: 14px;
+        scroll-snap-type: none; padding: 10px 5px; -webkit-overflow-scrolling: touch;
+        overflow-x: auto; scrollbar-width: none;
+    }
+    .two-row-review-grid::-webkit-scrollbar { display: none; }
+    .creative-review-card {
+        min-width: 85vw; scroll-snap-align: center; margin-right: 5px;
+        flex-shrink: 0; transform: none !important; backface-visibility: hidden;
+    }
+
+    .map-container { height: 500px !important; border-radius: 20px; margin-top: 10px; margin-bottom: 0; }
+    #map { height: 100% !important; border-radius: 20px; }
+
+    .mobile-booking-bar-glass {
+        position: fixed; bottom: 0; left: 0; right: 0;
+        background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+        padding: 14px 20px calc(14px + env(safe-area-inset-bottom));
+        border-top: 1px solid #f0f0f0; display: flex !important; align-items: center; justify-content: space-between;
+        z-index: 999; box-shadow: 0 -4px 15px rgba(0,0,0,0.03);
+    }
+    .glass-content-wrapper { width: 100%; display: flex; justify-content: space-between; align-items: center; }
+    .mobile-booking-bar-glass .ci-btn-reserve {
+        background: #1a1a1a; color: #fff; padding: 0 25px; border-radius: 12px;
+        min-width: 130px; height: 48px; border: none; font-weight: 700;
+    }
+}
+</style>

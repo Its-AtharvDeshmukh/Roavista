@@ -1,0 +1,202 @@
+<%- layout("/layouts/boilerplate") %>
+
+<div class="atelier-wrapper py-5 mt-3 pt-4">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        
+        <div class="atelier-header mb-4 text-center text-md-start animate-slide-up">
+          <h1 class="atelier-title">List Your Property</h1>
+          <p class="atelier-subtitle fs-5">Begin the journey of hosting by defining your space's unique soul.</p>
+        </div>
+
+        <form method="POST" action="/listings" novalidate class="needs-validation animate-slide-up" style="animation-delay: 0.1s;" enctype="multipart/form-data">
+          <div class="row g-5">
+            
+            <div class="col-md-7">
+              <div class="atelier-card p-4 p-md-5">
+                
+                <div class="mb-4">
+                  <label for="title" class="atelier-label">Property Title</label>
+                  <input name="listing[title]" id="title" placeholder="e.g. The Whispering Pines Cabin" type="text" class="form-control atelier-input w-100" required>
+                  <div class="invalid-feedback">A beautiful title helps you stand out.</div>
+                </div>
+                
+                <div class="mb-4">
+                  <label for="description" class="atelier-label">About Your Property</label>
+                  <textarea name="listing[description]" id="description" class="form-control atelier-input w-100" rows="9" placeholder="What makes this space feel like home?" required></textarea>
+                  <div class="invalid-feedback">Tell your guests what they can look forward to.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="category" class="atelier-label">Select Property Type</label>
+                    <select name="listing[category]" id="category" class="form-select atelier-input w-100" required style="cursor: pointer; border: none; height: 60px;">
+                        <option value="" disabled selected>Select the vibe of your space...</option>
+                        <option value="Trending">Trending</option>
+                        <option value="Rooms">Rooms</option>
+                        <option value="Iconic Cities">Iconic Cities</option>
+                        <option value="Mountains">Mountains</option>
+                        <option value="Castles">Castles</option>
+                        <option value="Amazing Pools">Amazing Pools</option>
+                        <option value="Camping">Camping</option>
+                        <option value="Farms">Farms</option>
+                        <option value="Arctic">Arctic</option>
+                        <option value="Domes">Domes</option>
+                        <option value="Boats">Boats</option>
+                    </select>
+                    <div class="invalid-feedback">Please select a category for your property.</div>
+                </div>
+               
+                <div class="row g-3">
+                  <div class="col-md-8">
+                    <label for="location" class="atelier-label">CITY & STATE</label>
+                    <input name="listing[location]" id="location" placeholder="Jaipur, Rajasthan" type="text" class="form-control atelier-input w-100" required>
+                    <div class="invalid-feedback">Where is this hidden gem located?</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label for="country" class="atelier-label">COUNTRY</label>
+                    <input name="listing[country]" id="country" placeholder="India" type="text" class="form-control atelier-input w-100" required>
+                    <div class="invalid-feedback">Country is required.</div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-md-5 mt-0">
+              <div class="atelier-sidebar sticky-top" style="z-index: 10;">
+                
+                <div class="atelier-box p-4">
+                  <label for="imageFileInput" class="atelier-label">UPLOAD VISUAL IDENTITY</label>
+                  
+                  <div class="visual-placeholder mb-3" id="imagePreviewBox">
+                    <i class="fa-solid fa-image-portrait"></i>
+                    <span class="preview-text">Image Preview appears here</span>
+                  </div>
+                  
+                  <input name="listing[images]" id="imageFileInput" type="file" class="form-control atelier-input w-100" accept="image/*" multiple required style="padding: 12px; background: transparent; border: 2px dashed rgba(211, 139, 93, 0.4);"> 
+                  <div class="invalid-feedback mt-2">Please upload at least one stunning photo of your space.</div>
+                  <p class="drop-subtext ms-md-3 mt-2">Supports: JPG, PNG, WEBP (Max 5 photos)</p>
+                </div> 
+
+                <div class="publish-glass-box p-4 mt-0">
+                  <label for="price" class="atelier-label">Price per night (₹) ⭐</label>
+                  <div class="price-input-wrapper mb-4 d-flex align-items-center flex-wrap">
+                    <span class="price-symbol me-2">₹</span>
+                    <input name="listing[price]" id="price" placeholder="1200" type="number" class="form-control atelier-price-input flex-grow-1" style="background: transparent; border: 1px solid transparent; outline: none; font-size: 1.2rem; font-weight: bold;" required>
+                    <div class="invalid-feedback w-100 mt-2">Please enter a valid nightly price.</div>
+                  </div>
+
+                  <label for="upiId" class="atelier-label text-success"><i class="fa-brands fa-google-pay me-1"></i> PAYOUT UPI ID</label>
+                  <div class="mb-4">
+                    <input name="listing[upiId]" id="upiId" placeholder="e.g. 9876543210@paytm" type="text" class="form-control atelier-input w-100" style="border: 1px solid #198754; background-color: rgba(25, 135, 84, 0.03);" required>
+                    <div class="invalid-feedback">A valid UPI ID is required to receive payouts.</div>
+                    <p class="mt-2 mb-0 subtitle" style="font-size: 0.75rem; color: #198754;">100% of guest payments will be routed directly to this UPI.</p>
+                  </div>
+                  
+                  <button class="btn-atelier-launch w-100" style="padding: 12px; font-weight: bold; background: #1a1a1a; color: white; border-radius: 10px; border: none;">
+                   Publish Listing<i class="fa-solid fa-rocket ms-2"></i>
+                  </button>
+                  <p class="text-center mt-2 extra-small atelier-subtitle subtitle mb-0">Your listing will be visible to the world instantly.</p>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap');
+  
+  .atelier-title {
+    font-size: xx-large;
+  }
+  
+  .w-100 {
+      width: 100%;
+  }
+
+  /* Force the invalid feedback to behave when placed inside flex containers like the price input */
+  .was-validated .form-control:invalid ~ .invalid-feedback {
+      display: block;
+  }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const fileInput = document.getElementById('imageFileInput');
+        const previewBox = document.getElementById('imagePreviewBox');
+
+        fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0]; 
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewBox.style.backgroundImage = `url('${e.target.result}')`;
+                    previewBox.classList.add('has-image');
+                }
+                reader.readAsDataURL(file);
+            } else {
+                previewBox.style.backgroundImage = 'none';
+                previewBox.classList.remove('has-image');
+            }
+        });
+    });
+</script>
+
+<style>
+  .subtitle {
+    font-size: 0.7rem;
+  }
+
+
+
+.atelier-dropzone {
+    position: relative;
+    width: 100%;
+    min-height: 200px;
+    border: 2px dashed rgba(211, 139, 93, 0.4);
+    border-radius: 20px;
+    background: #FDFBF9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    cursor: pointer;
+}
+
+.atelier-dropzone:hover, .atelier-dropzone.dragover {
+    border-color: var(--rv-gold);
+    background: #F7EBE5;
+    transform: translateY(-2px);
+}
+
+.atelier-input-hidden {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.dropzone-content { text-align: center; pointer-events: none; }
+.drop-icon { font-size: 2.5rem; color: var(--rv-gold); margin-bottom: 12px; opacity: 0.7; }
+.drop-text { font-weight: 700; color: var(--rv-text); margin: 0; }
+.drop-text span { color: var(--rv-gold); text-decoration: underline; }
+.drop-subtext { font-size: 0.75rem; color: var(--rv-text-muted); margin-top: 5px; }
+
+.preview-thumb {
+    width: 80px; height: 80px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 1px solid var(--rv-border);
+}
+</style>

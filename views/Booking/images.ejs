@@ -1,0 +1,81 @@
+<% layout("/layouts/boilerplate") %>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{padding:2rem 1.5rem;max-width:1400px;margin:5rem auto 0; ;margin-top: 0.5rem;}
+.header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:2rem;flex-wrap:wrap;gap:1rem}
+.kicker{font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:#888;display:block;margin-bottom:6px}
+.gallery-title{font-family:Georgia,serif;font-size:2rem;font-weight:500;color:#111}
+.back-btn{display:flex;align-items:center;gap:8px;font-size:13px;color:#111;border:1px solid #ddd;border-radius:100px;padding:8px 18px;cursor:pointer;background:#fff;transition:background 0.2s;text-decoration:none;white-space:nowrap}
+.back-btn:hover{background:#f5f5f5}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}
+.frame{border-radius:12px;overflow:hidden;position:relative;background:#f0f0f0}
+.frame img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.7s cubic-bezier(0.19,1,0.22,1)}
+.frame:hover img{transform:scale(1.05)}
+.overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.45) 0%,transparent 45%);opacity:0;transition:opacity 0.35s;display:flex;align-items:flex-end;justify-content:space-between;padding:18px}
+.frame:hover .overlay{opacity:1}
+.num{font-family:Georgia,serif;font-style:italic;font-size:1.1rem;color:rgba(255,255,255,0.9)}
+.expand{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.35);color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s,transform 0.25s;font-size:16px;line-height:1}
+.expand:hover{background:rgba(255,255,255,0.9);color:#333;transform:rotate(90deg)}
+.empty{grid-column:span 12;text-align:center;padding:4rem 0;color:#aaa}
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.94);z-index:9999;display:none;align-items:center;justify-content:center;cursor:zoom-out}
+.lightbox.open{display:flex}
+.lightbox img{max-width:88%;max-height:88%;border-radius:8px;animation:zin 0.3s ease}
+@keyframes zin{from{transform:scale(0.93);opacity:0}to{transform:scale(1);opacity:1}}
+@media(max-width:640px){.frame{grid-column:span 12 !important;height:240px !important}.gallery-title{font-size:1.5rem}}
+</style>
+
+<div class="wrap">
+  <div class="header">
+    <div>
+      <span class="kicker">Visual Collection</span>
+      <h2 class="gallery-title"><%= listing.title %></h2>
+    </div>
+    <a class="back-btn" href="/listings/<%= listing._id %>">
+      &#8592; Return to listing
+    </a>
+  </div>
+
+  <div class="grid">
+    <% if (listing.images && listing.images.length > 0) { %>
+      <% listing.images.forEach((img, i) => { %>
+        <%
+          let colSpan, height;
+          if (i === 0) { colSpan = 7; height = 420; }
+          else if (i === 1) { colSpan = 5; height = 420; }
+          else if (i === 2 || i === 3 || i === 4) { colSpan = 4; height = 300; }
+          else { colSpan = 6; height = 320; }
+        %>
+        <div class="frame" style="grid-column: span <%= colSpan %>; height: <%= height %>px;">
+          <img src="<%= img.url %>" alt="Photo <%= i + 1 %>" loading="lazy">
+          <div class="overlay">
+            <span class="num">0<%= i + 1 %></span>
+            <button class="expand" onclick="openLb('<%= img.url %>')">&#x2922;</button>
+          </div>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div class="empty">
+        <div style="font-size:2.5rem;margin-bottom:1rem">&#128444;</div>
+        <p>No images yet.</p>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<div class="lightbox" id="lb" onclick="closeLb()">
+  <img id="lbImg" src="" alt="Full view">
+</div>
+
+<script>
+  function openLb(url) {
+    document.getElementById('lbImg').src = url;
+    document.getElementById('lb').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLb() {
+    document.getElementById('lb').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+</script>

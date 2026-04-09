@@ -1,0 +1,233 @@
+<% layout("/layouts/boilerplate") %>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&display=swap');
+
+    .reservations-wrapper {
+        font-family: 'Manrope', sans-serif;
+        max-width: 900px;
+        margin: 0 auto;
+        padding-bottom: 100px;
+    }
+
+    .page-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: #111;
+        margin-bottom: 8px;
+    }
+
+    .page-subtitle {
+        color: #717171;
+        font-size: 1.1rem;
+        margin-bottom: 40px;
+    }
+
+    /* Guest Card Styling */
+    .guest-card {
+        background: #ffffff;
+        border: 1px solid #ebebeb;
+        border-radius: 24px;
+        padding: 28px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .guest-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+        border-color: #d1d1d1;
+    }
+
+    /* Header: Guest Info & Money */
+    .card-header-flex {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #f3f3f3;
+        padding-bottom: 20px;
+    }
+
+    .guest-profile {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .guest-avatar {
+        width: 56px;
+        height: 56px;
+        background: #111;
+        color: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        font-weight: 700;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .guest-name { font-size: 1.2rem; font-weight: 800; color: #111; margin: 0; }
+    .guest-email { font-size: 0.9rem; color: #717171; margin: 0; }
+
+    .payout-badge {
+        background: #ecfdf5;
+        color: #059669;
+        padding: 10px 20px;
+        border-radius: 100px;
+        font-weight: 800;
+        font-size: 1.05rem;
+        border: 1px solid #d1fae5;
+    }
+
+    /* Body: Stay Details */
+    .stay-details {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr 1fr;
+        gap: 20px;
+        padding: 5px 0;
+    }
+
+    .detail-block {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .detail-label { 
+        font-size: 0.7rem; 
+        font-weight: 800; 
+        color: #999; 
+        text-transform: uppercase; 
+        letter-spacing: 1.2px; 
+    }
+    
+    .detail-value { font-size: 1rem; font-weight: 700; color: #111; }
+    .property-name { color: #C4805A; }
+
+    /* Footer: Action Row */
+    .card-action-row {
+        border-top: 1px solid #f3f3f3;
+        padding-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .booking-id-text {
+        font-size: 0.75rem;
+        color: #bbb;
+        font-weight: 600;
+        font-family: monospace;
+    }
+
+    .btn-cancel-reservation {
+        background: #fff5f5;
+        border: 1px solid #ffe3e3;
+        color: #e03131;
+        font-weight: 700;
+        font-size: 0.85rem;
+        padding: 8px 18px;
+        border-radius: 10px;
+        transition: all 0.2s ease;
+    }
+
+    .btn-cancel-reservation:hover {
+        background: #e03131;
+        color: #ffffff;
+        border-color: #e03131;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 80px 20px;
+        background: #fff;
+        border: 2px dashed #eee;
+        border-radius: 32px;
+        margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .page-title { font-size: 2.2rem; }
+        .stay-details { grid-template-columns: 1fr; gap: 18px; }
+        .card-header-flex { flex-direction: column; align-items: flex-start; gap: 16px; }
+        .payout-badge { align-self: flex-start; }
+        .card-action-row { flex-direction: column-reverse; gap: 15px; align-items: flex-start; }
+    }
+</style>
+
+<div class="reservations-wrapper mt-5 fade-in-up">
+    <div class="d-flex justify-content-between align-items-end mb-2">
+        <div>
+            <h1 class="page-title">Guest Reservations</h1>
+            <p class="page-subtitle">Manage travelers visiting your sanctuaries.</p>
+        </div>
+    </div>
+
+    <% if (reservations.length === 0) { %>
+        <div class="empty-state">
+            <i class="fa-solid fa-bed-pulse mb-4" style="font-size: 4rem; color: #f0f0f0;"></i>
+            <h3 class="fw-bold">No upcoming guests</h3>
+            <p class="text-muted mx-auto" style="max-width: 300px;">When users book your listings, their trip details and contact info will appear here.</p>
+            <a href="/listings" class="btn btn-dark rounded-pill px-4 mt-3">View My Listings</a>
+        </div>
+    <% } else { %>
+        
+        <% reservations.forEach(res => { %>
+            <div class="guest-card">
+                
+                <div class="card-header-flex">
+                    <div class="guest-profile">
+                        <div class="guest-avatar">
+                            <%= res.user ? res.user.username.charAt(0).toUpperCase() : "?" %>
+                        </div>
+                        <div>
+                            <p class="guest-name"><%= res.user ? res.user.username : "Guest User" %></p>
+                            <p class="guest-email"><i class="fa-regular fa-envelope me-1"></i> <%= res.user ? res.user.email : "Email hidden" %></p>
+                        </div>
+                    </div>
+                    <div class="payout-badge">
+                        ₹<%= res.totalPrice.toLocaleString("en-IN") %> Payout
+                    </div>
+                </div>
+
+                <div class="stay-details">
+                    <div class="detail-block">
+                        <span class="detail-label">Listing</span>
+                        <span class="detail-value property-name"><i class="fa-solid fa-location-dot me-1"></i> <%= res.listing.title %></span>
+                    </div>
+                    
+                    <div class="detail-block">
+                        <span class="detail-label">Arrival</span>
+                        <span class="detail-value"><%= res.checkIn.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %></span>
+                    </div>
+
+                    <div class="detail-block">
+                        <span class="detail-label">Departure</span>
+                        <span class="detail-value"><%= res.checkOut.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %></span>
+                    </div>
+                </div>
+
+                <div class="card-action-row">
+                    <span class="booking-id-text">REF: <%= res._id.toString().slice(-8).toUpperCase() %></span>
+                    
+                    <form method="POST" action="/reservations/<%= res._id %>?_method=DELETE" 
+                          onsubmit="return confirm('WARNING: Are you sure you want to cancel this reservation? The guest will be notified immediately.')">
+                        <button class="btn-cancel-reservation">
+                            <i class="fa-solid fa-calendar-xmark me-2"></i>Cancel Stay
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        <% }) %>
+
+    <% } %>
+</div>

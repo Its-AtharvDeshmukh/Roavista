@@ -1,0 +1,133 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+<div class="sticky-top roavista-nav-wrapper d-none d-md-block mt-2">
+    <nav class="navbar navbar-expand-md roavista-capsule shadow-lg" style="background: white;">
+        <div class="container-fluid px-2 px-md-4 position-relative d-flex align-items-center">
+            
+            <a class="navbar-brand d-flex align-items-center rockstar-brand" href="/listings">
+                <span class="brand-text ms-1"><img src="/images/Rovista3.jpg" alt="Roavista" class="brand-img" style="height: 35px; width: auto; object-fit: contain;"></span>
+            </a>
+
+            <div class="nav-search-instrument d-none d-md-flex animate-fade-in mx-auto">
+                <form action="/listings/search" method="GET" class="instrument-inner">
+                    <button type="submit" class="instrument-btn">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                    <div class="instrument-divider"></div>
+                    <input type="text" name="q" placeholder="Where are you going?" class="instrument-input" autocomplete="off">
+                </form>
+            </div>
+
+            <div class="nav-right d-flex align-items-center gap-2 gap-md-3 ms-auto">
+                <a href="/listings/new" class="host-text-link d-none d-lg-block">List Your Property</a>
+                <div class="dropdown">
+                    <div class="user-capsule" data-bs-toggle="dropdown" aria-expanded="false" role="button">
+                        <i class="fa-solid fa-bars menu-icon"></i>
+                        <div class="avatar-circle">
+                            <% if(currUser) { %>
+                                <span class="avatar-letter"><%= currUser.username.charAt(0).toUpperCase() %></span>
+                            <% } else { %>
+                                <i class="fa-solid fa-user"></i>
+                            <% } %>
+                        </div>
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end elite-dropdown border-0 mt-3 shadow-lg">
+                        <% if(isAdmin) { %>
+                                <li class="nav-item">
+                                    <a class="dropdown-item" href="/admin/dashboard">Admin Dashboard</a>
+                                </li>
+                        <% } %>
+                        <% if(!currUser) { %>
+                            <li><a class="dropdown-item fw-bold text-terra" href="/signup">Sign up</a></li>
+                            <li><a class="dropdown-item fw-bold" href="/login">Log in</a></li>
+                        <% } else { %>
+                            <li><a class="dropdown-item fw-bold" href="/mylistings">My Listings</a></li>
+                            <li><a class="dropdown-item" href="/bookings">My Bookings</a></li>
+                            <li><a class="dropdown-item" href="/profile">Profile Info</a></li>
+                     
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger fw-bold" href="/logout">Log out</a></li>
+                        <% } %>
+                            
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<div class="d-block d-md-none fixed-top w-100" style="padding: 12px; pointer-events: none; z-index: 1030;">
+    
+    <div class="bg-white d-flex align-items-center justify-content-between mx-auto shadow-lg" style="border-radius: 50px; padding: 10px 20px; pointer-events: auto; max-width: 400px; border: 1px solid rgba(0,0,0,0.06);">
+        
+        <a href="#" class="text-dark text-decoration-none" data-bs-toggle="collapse" data-bs-target="#mobileMenuList">
+            <i class="fa-solid fa-bars-staggered fs-5"></i>
+        </a>
+
+        <a href="/listings" class="text-center mx-auto text-decoration-none">
+            <img src="/images/Rovista.jpg" alt="Roavista" style="height: 22px; width: auto; object-fit: contain;">
+        </a>
+
+        <a href="#" class="text-dark text-decoration-none" data-bs-toggle="collapse" data-bs-target="#islandSearchDrop">
+            <i class="fa-solid fa-magnifying-glass fs-5"></i>
+        </a>
+    </div>
+
+    <div class="collapse mt-2 mx-auto" id="mobileMenuList" style="pointer-events: auto; max-width: 400px;">
+        <div class="bg-white p-3 shadow-lg border" style="border-radius: 25px;">
+            <div class="d-flex align-items-center gap-3 mb-3 pb-3 border-bottom">
+                <div class="rounded-circle bg-dark text-white d-flex justify-content-center align-items-center" style="width: 35px; height: 35px; font-weight: bold; font-size: 0.8rem;">
+                    <%= currUser ? currUser.username.charAt(0).toUpperCase() : '?' %>
+                </div>
+                <span class="fw-bold">Hi, <%= currUser ? currUser.username : 'Guest' %></span>
+            </div>
+            
+            <ul class="list-unstyled mb-0">
+                <% if(!currUser) { %>
+                    <li class="mb-2">
+                        <a href="/login" class="text-decoration-none text-dark fw-bold d-block py-2">
+                            <i class="fa-solid fa-arrow-right-to-bracket me-3 text-muted"></i> Log In
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="/signup" class="text-decoration-none text-terra fw-bold d-block py-2" style="color: #d38b5d;">
+                            <i class="fa-solid fa-user-plus me-3"></i> Sign Up
+                        </a>
+                    </li>
+                <% } else { %>
+                    <li class="mb-2"><a href="/mylistings" class="text-decoration-none text-dark fw-bold d-block py-2"><i class="fa-solid fa-house-user me-3 text-muted"></i> My Listings</a></li>
+                    <li class="mb-2"><a href="/bookings" class="text-decoration-none text-dark fw-bold d-block py-2"><i class="fa-solid fa-suitcase-rolling me-3 text-muted"></i> My Bookings</a></li>
+                    <li class="mb-2"><a href="/listings/new" class="text-decoration-none text-dark fw-bold d-block py-2"><i class="fa-solid fa-plus me-3 text-muted"></i> Add Listing</a></li>
+                    
+                    <% if(isAdmin) { %>
+                        <li class="mb-2">
+                            <a href="/admin/dashboard" class="text-decoration-none text-warning fw-bold d-block py-2">
+                                <i class="fa-solid fa-shield-halved me-3"></i> Admin Dashboard
+                            </a>
+                        </li>
+                    <% } %>
+
+                    <li class="mt-2 pt-2 border-top"><a href="/profile" class="text-decoration-none text-success fw-bold d-block py-2"><i class="fa-solid fa-user-gear me-3"></i> Profile Info</a></li>
+                    <li><a href="/logout" class="text-decoration-none text-danger fw-bold d-block py-2"><i class="fa-solid fa-power-off me-3"></i> Log Out</a></li>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+
+    <div class="collapse mt-2 mx-auto" id="islandSearchDrop" style="pointer-events: auto; max-width: 400px;">
+        <div class="bg-white p-2 shadow-lg" style="border-radius: 30px; border: 1px solid rgba(0,0,0,0.04);">
+            <form action="/listings/search" method="GET" class="d-flex align-items-center bg-light px-3 py-2" style="border-radius: 30px;">
+                <i class="fa-solid fa-location-dot text-muted me-2 small"></i>
+                <input type="text" name="q" placeholder="Where to next?" class="border-0 bg-transparent w-100" autocomplete="off" style="outline: none; font-size: 0.95rem; font-weight: 500;">
+                <button type="submit" class="border-0 bg-transparent fw-bold ms-2" style="color: #d38b5d;">Search</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<style>
+    @media (max-width: 767px) {
+        body { padding-top: 80px !important; }
+    }
+</style>
