@@ -1,4 +1,8 @@
 {
+  "engines":{
+      "node":
+      "22.19.0"
+  },
   "name": "roavista",
   "version": "1.0.0",
   "description": "Premium Sanctuary Booking Platform",
@@ -7,7 +11,7 @@
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Atharv Deshmukh",
+  "author": "Atharv Ansh Sujal",
   "license": "ISC",
   "dependencies": {
     "@mapbox/mapbox-sdk": "^0.16.2",
